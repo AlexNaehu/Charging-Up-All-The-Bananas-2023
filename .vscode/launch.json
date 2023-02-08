@@ -8,6 +8,13 @@
       "type": "java",
       "name": "Launch Main",
       "request": "launch",
+      "mainClass": "frc.robot.Robot.Main",
+      "projectName": "Charging Up All The Bananas 2023"
+    },
+    {
+      "type": "java",
+      "name": "Launch Main",
+      "request": "launch",
       "mainClass": "frc.robot.Main",
       "projectName": "Charging Up All The Bananas 2023"
     },
