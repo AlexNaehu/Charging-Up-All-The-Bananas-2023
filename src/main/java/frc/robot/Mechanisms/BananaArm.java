@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -141,7 +142,7 @@ public BananaArm(){
             double kDPow;
             double kIPow;
 
-            while(true)
+            while(armTargetHit = false)
             {
                
                 
@@ -171,6 +172,7 @@ public BananaArm(){
                         integral += deltaTime * currentError;
 
                         currentDerivative = (deltaError / deltaTime);
+                        //might change filtering
                         filteredDerivative = (0.7 * currentDerivative) + (0.3 * previousDerivative);
 
                         kAPow = 0; //kA * ((getArmExtensionDistance() + 13) * Math.cos(Math.toRadians(currentAngle - 45)));
@@ -202,9 +204,11 @@ public BananaArm(){
                     
                         Timer.delay(ARM_PIVOT_THREAD_WAITING_TIME);
                     //}
-                
+                if(getPivotAngle()==getPivotTargetAngle())
+                    armTargetHit = true;
             }
         });
         pivotThread.start();
+        armTargetHit = false;
     }
 }
