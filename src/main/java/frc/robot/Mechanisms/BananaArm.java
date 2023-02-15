@@ -36,7 +36,6 @@ private WPI_VictorSPX angler2 = new WPI_VictorSPX(6);
 
 
 
-
 private Thread pivotThread;
 
 private Timer timerangler = new Timer();
@@ -190,7 +189,9 @@ public BananaArm(){
 
                         //turnPivot(-power);
 
+                        //should probably make angler 2 follow angler 1 somehow
                         angler1.set(-power);
+                        angler2.set(-power);
 
                         SmartDashboard.putNumber("pivot error", currentError);
                     
