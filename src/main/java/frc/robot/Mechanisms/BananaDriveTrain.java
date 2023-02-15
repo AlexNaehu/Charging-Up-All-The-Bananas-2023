@@ -41,7 +41,7 @@ public class BananaDriveTrain {
    
     public  double         currentEncCountsToInches = 0.0;
  
-    
+    private Thread turnThread;
  
  
     /*----------------------------------------------------------------------------------------------
@@ -55,14 +55,10 @@ public class BananaDriveTrain {
     public final double RT_PID_D = 0.0;    
     public final double RT_PID_F = 1080.0/20480.0; 
 
-    public final double LT_PID_P = 0.04;  //TBD-MH: verify lt and rt values
-    public final double LT_PID_I = 0.0; 
-    public final double LT_PID_D = 0.0;    
-    public final double LT_PID_F = 1080.0/20480.0;  //TBD-MH:  ADD COMMENTS & DEFINE CONSTANTS
 
     private      double drvStraightTargetVelocityOffsetFwd = 50.0;
-    private      double drvStraightTargetVelocityOffsetBwd = 50.0;
-
+    
+    public static boolean turnTargetHit = false;
  
  
     public BananaDriveTrain()
@@ -141,6 +137,17 @@ public class BananaDriveTrain {
         Rdrive1.setIdleMode(IdleMode.kCoast);
         Rdrive2.setIdleMode(IdleMode.kCoast);
     }
+
+    
+
+    //For auton, maybe do PID turn
+
+    
+    
+
+
+
+
      public double getMotorTemperature(int id)
     {
         double temp = -999.0;

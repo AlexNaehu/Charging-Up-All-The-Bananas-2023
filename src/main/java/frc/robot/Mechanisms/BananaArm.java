@@ -204,9 +204,13 @@ public BananaArm(){
                     
                         Timer.delay(ARM_PIVOT_THREAD_WAITING_TIME);
                     //}
-                if(getPivotAngle()==getPivotTargetAngle())
-                    armTargetHit = true;
+                        if(getPivotAngle()==getPivotTargetAngle()){
+                            angler1.set(0);
+                            angler2.set(0);
+                            armTargetHit = true;
+                        }
             }
+                
         });
         pivotThread.start();
         armTargetHit = false;
