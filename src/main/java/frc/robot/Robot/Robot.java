@@ -49,12 +49,13 @@ public class Robot extends TimedRobot
   public static BananaClaw        claw;
 
   private static XboxController xboxDrv;
-  private static XboxController xboxAux ;
+  private static XboxController controller ;
 
   private static final int XBOX_DRV_PORT = 0;
   private static final int XBOX_AUX_PORT = 1;
 
   
+
   @Override
   public void robotInit() 
   {
@@ -76,7 +77,7 @@ public class Robot extends TimedRobot
     brake       = new BananaBrake();
   
     xboxDrv    = new XboxController(XBOX_DRV_PORT);
-    xboxAux    = new XboxController(XBOX_AUX_PORT);
+    controller    = new XboxController(XBOX_AUX_PORT);
 
     
     
@@ -171,6 +172,7 @@ public class Robot extends TimedRobot
   public void teleopInit() 
   {
     initializeRobotPositions();
+
   }
 
   @Override
@@ -192,8 +194,8 @@ public class Robot extends TimedRobot
     /*--------------------------------------------------------------------------
     *  DriveBase controls
     *-------------------------------------------------------------------------*/
-   
-   
+    
+    driveTrain.tankDrive(controller.getLeftY(), controller.getRightY());
    
    
      /*--------------------------------------------------------------------------
@@ -215,27 +217,27 @@ public class Robot extends TimedRobot
     *  Arm Movement - Manual Control
     *-------------------------------------------------------------------------*/
       
-    if(xboxAux.getBButton())
+    if(controller.getBButton())
     {
       BananaPreSets.lvl3RocketBall();
     }
-    if(xboxAux.getYButton())
+    if(controller.getYButton())
     {
       BananaPreSets.lvl2RocketBall();
     }
-    if(xboxAux.getXButton())
+    if(controller.getXButton())
     {
       BananaPreSets.lvl1RocketBall();
     }
-    if(xboxAux.getAButton())
+    if(controller.getAButton())
     {
       BananaPreSets.cargoPickUp();
     }
-    if(xboxAux.getStartButton())
+    if(controller.getStartButton())
     {
       BananaPreSets.neutralPivotAngle();
     }
-    if(xboxAux.getBackButton())
+    if(controller.getBackButton())
     {
       BananaPreSets.hatchPickUp();
     }
@@ -275,9 +277,7 @@ public class Robot extends TimedRobot
      
     
 
-    /*--------------------------------------------------------------------------
-    *  Wrist Movement
-    *-------------------------------------------------------------------------*/
+    
      
      
     

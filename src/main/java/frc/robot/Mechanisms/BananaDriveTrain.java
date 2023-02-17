@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot.BananaConstants;
 
 public class BananaDriveTrain {
-    private CANSparkMax Rdrive1 = new CANSparkMax(27, MotorType.kBrushless);
-    private CANSparkMax Rdrive2 = new CANSparkMax(28, MotorType.kBrushless);
-    private CANSparkMax Ldrive1 = new CANSparkMax(26, MotorType.kBrushless); 
-    private CANSparkMax Ldrive2 = new CANSparkMax(25, MotorType.kBrushless);
+    private CANSparkMax Rdrive1;
+    private CANSparkMax Rdrive2;
+    private CANSparkMax Ldrive1; 
+    private CANSparkMax Ldrive2;
 
     private static int Rdrive1ID = 27;
     private static int Rdrive2ID = 28;
@@ -29,7 +29,7 @@ public class BananaDriveTrain {
     private MotorControllerGroup RIGHT = new MotorControllerGroup(Rdrive1, Rdrive2);
     private MotorControllerGroup LEFT = new MotorControllerGroup(Ldrive1, Ldrive2);
 
-    private DifferentialDrive drivebase = new DifferentialDrive(RIGHT, LEFT);
+    private DifferentialDrive drivebase;
 
     private double left_command = 0;
     private double right_command = 0;
@@ -63,7 +63,16 @@ public class BananaDriveTrain {
  
     public BananaDriveTrain()
     {
-     
+       
+
+        
+        Rdrive1 = new CANSparkMax(27, MotorType.kBrushless);
+        Rdrive2 = new CANSparkMax(28, MotorType.kBrushless);
+        Ldrive1 = new CANSparkMax(26, MotorType.kBrushless); 
+        Ldrive2 = new CANSparkMax(25, MotorType.kBrushless);
+
+       drivebase = new DifferentialDrive(RIGHT, LEFT); 
+
        Rdrive1.restoreFactoryDefaults();
        Rdrive2.restoreFactoryDefaults();
        Ldrive1.restoreFactoryDefaults();
@@ -76,7 +85,9 @@ public class BananaDriveTrain {
        Rdrive1.setInverted(true);
        Rdrive2.setInverted(true);
      
-     
+        
+
+
      
        //setDriveTrainPIDConfiguration(LEFT, LT_PID_P, LT_PID_I, LT_PID_D, LT_PID_F); //TBD Only used for autonomous
        //setDriveTrainPIDConfiguration(RIGHT, RT_PID_P, RT_PID_I, RT_PID_D, RT_PID_F);
@@ -139,6 +150,13 @@ public class BananaDriveTrain {
     }
 
     
+    public void tankDrive(double L, double R){
+
+        drivebase.tankDrive(L, R);
+
+    }
+
+
 
     //For auton, maybe do PID turn
 
