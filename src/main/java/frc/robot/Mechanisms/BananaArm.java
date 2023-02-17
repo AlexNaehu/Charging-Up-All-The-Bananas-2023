@@ -142,7 +142,7 @@ public BananaArm(){
             double kDPow;
             double kIPow;
 
-            while(armTargetHit = false)
+            while(armTargetHit == false)
             {
                
                 
@@ -213,6 +213,6 @@ public BananaArm(){
                 
         });
         pivotThread.start();
-        armTargetHit = false;
+        
     }
 }

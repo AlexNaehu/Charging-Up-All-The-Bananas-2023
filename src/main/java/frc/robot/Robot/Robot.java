@@ -128,7 +128,7 @@ public class Robot extends TimedRobot
     
     //Arm          
     SmartDashboard.putNumber("PIVOT: Target Angle", arm.getPivotTargetAngle());
-    SmartDashboard.putNumber("PIVOT: Encoder Voltage", arm.armPivotEnc.getVoltage());
+    SmartDashboard.putNumber("PIVOT: Encoder Voltage", BananaArm.armPivotEnc.getVoltage());
     SmartDashboard.putNumber("PIVOT: Encoder Angle", arm.getPivotAngle());
     // TODO SmartDashboard.putNumber("pivot power", arm.getPivotPower());
     
@@ -158,26 +158,25 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit() 
   {
-    //initializeRobotPositions();
+    initializeRobotPositions();
   }
 
   @Override
   public void autonomousPeriodic()
   {
-    //robotControls();
+    robotControls();
   }
 
   @Override
   public void teleopInit() 
   {
-    //initializeRobotPositions();
-  
+    initializeRobotPositions();
   }
 
   @Override
   public void teleopPeriodic() 
   {
-    //robotControls();
+    robotControls();
     
   }
 
