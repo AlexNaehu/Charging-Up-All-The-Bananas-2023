@@ -92,7 +92,7 @@ public class Robot extends TimedRobot
     
     
     arm.setPivotTargetAngle(arm.getPivotAngle());
-    // TODO arm.pivotPID();
+    arm.pivotPID();
 
     
   }
