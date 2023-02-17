@@ -111,7 +111,7 @@ public BananaArm(){
             final double ARM_PIVOT_THREAD_WAITING_TIME = 0.005;
             final double kP = 0.005;//0.007
             final double kD = 0.0005; 
-            final double kI = 0.00001;
+            final double kI = 0.0000;//0.00001
             final double kA = 0.0022;//0.0077;
             final double kF = 0.0;//-0.05;
 
