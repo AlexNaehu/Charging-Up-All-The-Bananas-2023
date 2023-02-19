@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController; //used to make VictorSPX motors follow eachother
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -55,7 +56,7 @@ private static double PIVOT_VOLTAGE_OFFSET = 0.0;//may change if the motors requ
 
 
 public static AnalogInput armPivotEnc;
-private static final int    ARM_PIVOT_ENCODER_ANALOG_PORT = 1;
+private static final int    ARM_PIVOT_ENCODER_ANALOG_PORT = 0;
 private static final double ARM_PIVOT_ENC_MAX_VOLTAGE     = 5.0;
 
 
@@ -122,7 +123,7 @@ public BananaArm(){
 
             double previousError = 0;
             double currentError; 
-            double deltaError = 0; 
+            double deltaError = 2; 
 
             double previousDerivative = 0;
             double currentDerivative;    // in case you want to filter derivative
@@ -142,32 +143,37 @@ public BananaArm(){
             double kDPow;
             double kIPow;
 
+            
+
+            boolean runPivotPID = true;
+
             while(armTargetHit == false)
             {
                
                 
-                    //SmartDashboard.putBoolean("pivot pid state", runPivotPID);
-                    currentTime  = pivotTimer.get();
+                    SmartDashboard.putBoolean("pivot pid state", runPivotPID);
+                    currentTime = pivotTimer.get();
                     currentAngle = getPivotAngle();
 
                     currentError = targetAngle - currentAngle;
                     
-                    /*if(Math.abs(currentError-previousError) < 1.0)
+                    //accuracy checker (within 1 degree of goal)
+                    if(Math.abs(deltaError) < 1.0)
                     {
-                       if((armTimer.get() - currentTime) > 0.1)
+                       if((pivotTimer.get() - currentTime) > 0.1)
                        {
                             runPivotPID = false;
-                            turnPivot(0.0);
-                            setPivotTargetAngle(CatzConstants.INVALID_ANGLE);
+                            angler1.set(0.0);
+                            angler2.set(0.0);
                             Thread.currentThread().interrupt();
                        }    
                           
-                    }*/
+                    }
 
-                    //if(runPivotPID == true)
-                    //{
+                    if(runPivotPID == true)
+                    {
                         deltaError = currentError - previousError;
-                        deltaTime  = currentTime  - previousTime;
+                        deltaTime = currentTime - previousTime;
 
                         integral += deltaTime * currentError;
 
@@ -203,7 +209,7 @@ public BananaArm(){
                         previousDerivative = currentDerivative;
                     
                         Timer.delay(ARM_PIVOT_THREAD_WAITING_TIME);
-                    //}
+                    }
                         if(getPivotAngle()==getPivotTargetAngle()){
                             angler1.set(0);
                             angler2.set(0);

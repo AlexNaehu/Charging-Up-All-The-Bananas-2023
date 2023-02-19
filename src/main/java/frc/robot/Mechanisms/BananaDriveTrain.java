@@ -21,13 +21,13 @@ public class BananaDriveTrain {
     private CANSparkMax Ldrive1; 
     private CANSparkMax Ldrive2;
 
-    private static int Rdrive1ID = 27;
-    private static int Rdrive2ID = 28;
-    private static int Ldrive1ID = 26;
-    private static int Ldrive2ID = 25;
+    private static int Rdrive1ID = 21;
+    private static int Rdrive2ID = 22;
+    private static int Ldrive1ID = 20;
+    private static int Ldrive2ID = 23;
 
-    private MotorControllerGroup RIGHT = new MotorControllerGroup(Rdrive1, Rdrive2);
-    private MotorControllerGroup LEFT = new MotorControllerGroup(Ldrive1, Ldrive2);
+    //private MotorControllerGroup RIGHT;
+    //private MotorControllerGroup LEFT;
 
     private DifferentialDrive drivebase;
 
@@ -41,7 +41,7 @@ public class BananaDriveTrain {
    
     public  double         currentEncCountsToInches = 0.0;
  
-    private Thread turnThread;
+    //private Thread turnThread;
  
  
     /*----------------------------------------------------------------------------------------------
@@ -66,10 +66,13 @@ public class BananaDriveTrain {
        
 
         
-        Rdrive1 = new CANSparkMax(27, MotorType.kBrushless);
-        Rdrive2 = new CANSparkMax(28, MotorType.kBrushless);
-        Ldrive1 = new CANSparkMax(26, MotorType.kBrushless); 
-        Ldrive2 = new CANSparkMax(25, MotorType.kBrushless);
+        Rdrive1 = new CANSparkMax(Rdrive1ID, MotorType.kBrushless);
+        Rdrive2 = new CANSparkMax(Rdrive2ID, MotorType.kBrushless);
+        Ldrive1 = new CANSparkMax(Ldrive1ID, MotorType.kBrushless); 
+        Ldrive2 = new CANSparkMax(Ldrive2ID, MotorType.kBrushless);
+
+        MotorControllerGroup RIGHT = new MotorControllerGroup(Rdrive1, Rdrive2);
+        MotorControllerGroup LEFT = new MotorControllerGroup(Ldrive1, Ldrive2);
 
        drivebase = new DifferentialDrive(RIGHT, LEFT); 
 
@@ -82,8 +85,10 @@ public class BananaDriveTrain {
        Rdrive2.follow(Rdrive1);
        Ldrive2.follow(Ldrive1);
      
-       Rdrive1.setInverted(true);
-       Rdrive2.setInverted(true);
+       RIGHT.setInverted(true); 
+
+       //Rdrive1.setInverted(true);
+       //Rdrive2.setInverted(true);
      
         
 
@@ -152,7 +157,7 @@ public class BananaDriveTrain {
     
     public void tankDrive(double L, double R){
 
-        drivebase.tankDrive(L, R);
+        drivebase.tankDrive(L*0.5, R*0.5);
 
     }
 

@@ -48,11 +48,11 @@ public class Robot extends TimedRobot
   public static BananaBrake      brake;
   public static BananaClaw        claw;
 
-  private static XboxController xboxDrv;
+  //private static XboxController xboxDrv;
   private static XboxController controller ;
 
+  //private static final int XBOX_DRV_PORT = 0;
   private static final int XBOX_DRV_PORT = 0;
-  private static final int XBOX_AUX_PORT = 1;
 
   
 
@@ -76,8 +76,8 @@ public class Robot extends TimedRobot
     claw = new BananaClaw();
     brake       = new BananaBrake();
   
-    xboxDrv    = new XboxController(XBOX_DRV_PORT);
-    controller    = new XboxController(XBOX_AUX_PORT);
+    //xboxDrv    = new XboxController(XBOX_DRV_PORT);
+    controller    = new XboxController(XBOX_DRV_PORT);
 
     
     
