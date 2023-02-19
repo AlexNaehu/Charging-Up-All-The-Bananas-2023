@@ -197,7 +197,6 @@ public class Robot extends TimedRobot
     
     driveTrain.tankDrive(controller.getLeftY(), controller.getRightY());
    
-   
      /*--------------------------------------------------------------------------
     *  DriveBase shifter
     *-------------------------------------------------------------------------*/
@@ -207,40 +206,16 @@ public class Robot extends TimedRobot
      
      
      /*--------------------------------------------------------------------------
-    *  Pivot Movement
+    *  Pivot Movement - Manual Control
     *-------------------------------------------------------------------------*/
-   
-   
-   
+    
+    
    
       /*--------------------------------------------------------------------------
     *  Arm Movement - Manual Control
     *-------------------------------------------------------------------------*/
       
-    if(controller.getBButton())
-    {
-      BananaPreSets.lvl3RocketBall();
-    }
-    if(controller.getYButton())
-    {
-      BananaPreSets.lvl2RocketBall();
-    }
-    if(controller.getXButton())
-    {
-      BananaPreSets.lvl1RocketBall();
-    }
-    if(controller.getAButton())
-    {
-      BananaPreSets.cargoPickUp();
-    }
-    if(controller.getStartButton())
-    {
-      BananaPreSets.neutralPivotAngle();
-    }
-    if(controller.getBackButton())
-    {
-      BananaPreSets.hatchPickUp();
-    }
+    
       
       
     
@@ -263,26 +238,40 @@ public class Robot extends TimedRobot
    
 
     /*--------------------------------------------------------------------------
-    *  Aux Controller - Hatch Position Presets
+    *  Aux Controller - Pick Up Position Presets
+                        Preset Arm Positions
     *-------------------------------------------------------------------------*/
      
-     
-  
+    if(controller.getStartButton())
+    {
+      BananaPreSets.neutralPivotAngle();
+    }
+    if(controller.getAButton())
+    {
+      BananaPreSets.cargoPickUp();
+    }
+    if(controller.getBackButton())
+    {
+      BananaPreSets.hatchPickUp();
+    }
 
      /*--------------------------------------------------------------------------
-    *  Aux Controller - Cargo Position Presets
-    * preset arm positions
+    *  Aux Controller - Scoring Position Presets
+    *                   Preset Arm Positions
     *-------------------------------------------------------------------------*/
      
-     
-    
-
-    
-     
-     
-    
-    
-      
+    if(controller.getBButton())
+    {
+      BananaPreSets.lvl3RocketBall();
+    }
+    if(controller.getYButton())
+    {
+      BananaPreSets.lvl2RocketBall();
+    }
+    if(controller.getXButton())
+    {
+      BananaPreSets.lvl1RocketBall();
+    }
     
   }
 }

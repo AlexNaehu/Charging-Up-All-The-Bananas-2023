@@ -34,7 +34,7 @@ public class BananaPreSets
    
     
     
-    //Values for scoring cargo in different levels
+    //Values for scoring cargo in different levels (RECALCULATE THE ANGLES BASED ON GAME SPECS)
      
     private static double LVL_3_BALL_PIVOT_ANGLE = 90.0; //Top step in the scoring grids
     
@@ -61,6 +61,12 @@ public class BananaPreSets
         Robot.arm.setArmTargetHit(false);  
     }
 
+    /*
+     * 
+     *  Positions for picking up cargo
+     * 
+     */
+    
     public static void cargoPickUp()
     {
         Timer.delay(0.3);
@@ -77,7 +83,7 @@ public class BananaPreSets
 
     /*
      * 
-     *  Positions for Cargo in different shelf levels
+     *  Positions for placing cargo in different shelf levels
      * 
      */
 
