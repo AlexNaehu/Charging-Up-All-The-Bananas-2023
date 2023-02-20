@@ -54,7 +54,10 @@ public class Robot extends TimedRobot
   //private static final int XBOX_DRV_PORT = 0;
   private static final int XBOX_DRV_PORT = 0;
 
-  
+  private Thread aimPID;
+
+  private float left_command;
+  private float right_command;
 
   @Override
   public void robotInit() 
@@ -201,7 +204,42 @@ public class Robot extends TimedRobot
     *  DriveBase shifter
     *-------------------------------------------------------------------------*/
      
-     
+    aimPID = new Thread(() ->
+    {
+      float kAimP = -0.1f;  //may need to calibrate kAimP or min_command if aiming causes occilation
+      float min_command = 0.05f;
+  
+      NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+      NetworkTableEntry tx = table.getEntry("tx");
+      float x = tx.getFloat(0.0f);
+
+  
+      if (controller.getLeftBumperPressed())
+      {
+          float heading_error = -x;
+          float steering_adjust = 0.0f;
+  
+          if (Math.abs(heading_error) > 1.0)
+          {
+                  if (heading_error < 0)
+                  {
+                          steering_adjust = kAimP*heading_error + min_command;
+                  }
+                  else
+                  {
+                          steering_adjust = kAimP*heading_error - min_command;
+                  }
+          }
+          left_command += steering_adjust;
+          right_command -= steering_adjust;
+      }
+
+      
+    });
+        
+      
+  
+       
      
      
      
@@ -235,7 +273,11 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
      
      
-   
+   /*boolean parkingBreak = false;
+    if(controller.getLeftBumper()){
+        parkingBreak = !parkingBreak;
+    }
+    */
 
     /*--------------------------------------------------------------------------
     *  Aux Controller - Pick Up Position Presets
@@ -273,5 +315,7 @@ public class Robot extends TimedRobot
       BananaPreSets.lvl1RocketBall();
     }
     
+    
   }
+
 }

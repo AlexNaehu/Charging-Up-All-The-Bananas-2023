@@ -57,7 +57,7 @@ private static double PIVOT_VOLTAGE_OFFSET = 0.0;//may change if the motors requ
 
 public static AnalogInput armPivotEnc;
 private static final int    ARM_PIVOT_ENCODER_ANALOG_PORT = 0;
-private static final double ARM_PIVOT_ENC_MAX_VOLTAGE     = 5.0;
+private static final double ARM_PIVOT_ENC_MAX_VOLTAGE     = 4.784;
 
 
 public static boolean armTargetHit = false;
