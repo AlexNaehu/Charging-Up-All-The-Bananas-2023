@@ -32,20 +32,20 @@ import edu.wpi.first.wpilibj.AnalogInput;
 
 public class BananaArm{
 
-private WPI_VictorSPX angler1 = new WPI_VictorSPX(5);
-private WPI_VictorSPX angler2 = new WPI_VictorSPX(6);
+private WPI_VictorSPX leftAngler = new WPI_VictorSPX(28);
+private WPI_VictorSPX rightAngler = new WPI_VictorSPX(29);
 
 
 
 
 private Thread pivotThread;
 
-private Timer timerangler = new Timer();
+private Timer pivotTimer = new Timer();
 
 
 
 private static volatile double targetAngle;
-private static final double ARM_PIVOT_MAX_ANGLE = 100.0;   //Robot 0 deg = Arm pointing straight down
+private static final double ARM_PIVOT_MAX_ANGLE = 110.0;   //Robot 0 deg = Arm pointing straight down
 private static final double ARM_PIVOT_MIN_ANGLE = 0.0;     //TBD, the reason for 100 is so an error of 
                                                             //10 degrees overshoot wont break the code
 
@@ -147,7 +147,7 @@ public BananaArm(){
 
             boolean runPivotPID = true;
 
-            while(armTargetHit == false)
+            while(armTargetHit == false && getPivotAngle() < ARM_PIVOT_MAX_ANGLE)
             {
                
                 
@@ -163,8 +163,8 @@ public BananaArm(){
                        if((pivotTimer.get() - currentTime) > 0.1)
                        {
                             runPivotPID = false;
-                            angler1.set(0.0);
-                            angler2.set(0.0);
+                            leftAngler.set(0.0);
+                            rightAngler.set(0.0);
                             Thread.currentThread().interrupt();
                        }    
                           
@@ -198,8 +198,8 @@ public BananaArm(){
                         //turnPivot(-power);
 
                         //should probably make angler 2 follow angler 1 somehow
-                        angler1.set(-power);
-                        angler2.set(-power);
+                        leftAngler.set(-power);
+                        rightAngler.set(-power);
 
                         SmartDashboard.putNumber("pivot error", currentError);
                     
@@ -211,8 +211,8 @@ public BananaArm(){
                         Timer.delay(ARM_PIVOT_THREAD_WAITING_TIME);
                     }
                         if(getPivotAngle()==getPivotTargetAngle()){
-                            angler1.set(0);
-                            angler2.set(0);
+                            leftAngler.set(0);
+                            rightAngler.set(0);
                             armTargetHit = true;
                         }
             }

@@ -262,10 +262,25 @@ public class Robot extends TimedRobot
        *----------------------------------------------------------------------*/
        
        /*-----------------------------------------------------------------------
-       *  In Deadband - Hold Position
+       *  Intake(Claw) - Manual Control
        *----------------------------------------------------------------------*/
       
-         // only stop arm if pid thread is not running 
+    if (controller.getRightBumper())
+    {
+      BananaClaw.changeClawState();
+    }
+      
+    if(BananaClaw.intakeOpen == false)
+      {
+        BananaClaw.closeClaw(0.2);
+      }
+        else if(BananaClaw.intakeOpen == true)
+        {
+          BananaClaw.openClaw(0.2);
+        }
+      
+
+    
          
          
      /*--------------------------------------------------------------------------
@@ -273,11 +288,15 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
      
      
-   /*boolean parkingBreak = false;
-    if(controller.getLeftBumper()){
-        parkingBreak = !parkingBreak;
-    }
-    */
+        if(controller.getLeftBumper())
+        {
+          BananaBrake.changeBrakeState();
+        }
+        if(BananaBrake.brakeOn == true)
+          {
+            BananaBrake.Brake(0.2);
+          }
+        
 
     /*--------------------------------------------------------------------------
     *  Aux Controller - Pick Up Position Presets
