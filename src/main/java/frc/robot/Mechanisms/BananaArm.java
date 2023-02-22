@@ -105,6 +105,7 @@ public BananaArm(){
         Robot.arm.setArmTargetHit(false);
     }
 
+    
     public void pivotPID()
     {
         pivotThread = new Thread(() ->

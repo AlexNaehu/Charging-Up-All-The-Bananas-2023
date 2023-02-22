@@ -117,7 +117,7 @@ public class Robot extends TimedRobot
     double area = ta.getDouble(0.0);
     double v = tv.getDouble(0.0);
     
-    //post to smart dashboard periodically
+    //Limelight
     SmartDashboard.putNumber("Limelight X", x); //(x,y) from the crosshair on the camera stream in pixle units
     SmartDashboard.putNumber("Limelight Y", y);
     SmartDashboard.putNumber("Limelight Area", area); //area of FOV that the target takes up
@@ -134,9 +134,17 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("PIVOT: Target Angle", arm.getPivotTargetAngle());
     SmartDashboard.putNumber("PIVOT: Encoder Voltage", BananaArm.armPivotEnc.getVoltage());
     SmartDashboard.putNumber("PIVOT: Encoder Angle", arm.getPivotAngle());
-    // TODO SmartDashboard.putNumber("pivot power", arm.getPivotPower());
-    
-   
+    //TODO: SmartDashboard.putNumber("pivot power", arm.getPivotPower());
+
+    //Claw
+    SmartDashboard.putBoolean("Claw: Open State", BananaClaw.isIntakeOpen());
+    SmartDashboard.putNumber("Claw: Left Power", BananaClaw.getLeftFingerPower());
+    SmartDashboard.putNumber("Claw: Right Power", BananaClaw.getRightFingerPower());
+
+    //Brake
+    SmartDashboard.putBoolean("Brake: On State", BananaBrake.isBrakeOn());
+    SmartDashboard.putNumber("Brake: Left Power", BananaBrake.getLeftBrakePower());
+    SmartDashboard.putNumber("Brake: Reft Power", BananaBrake.getRightBrakePower());
 
     double targetOffsetAngle_Vertical = ty.getDouble(0.0);
 
