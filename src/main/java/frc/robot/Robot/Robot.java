@@ -276,9 +276,8 @@ public class Robot extends TimedRobot
     if (controller.getRightBumper())
     {
       BananaClaw.changeClawState();
-    }
-      
-    if(BananaClaw.intakeOpen == false)
+
+      if(BananaClaw.intakeOpen == false)
       {
         BananaClaw.closeClaw(0.2);
       }
@@ -286,6 +285,9 @@ public class Robot extends TimedRobot
         {
           BananaClaw.openClaw(0.2);
         }
+    }
+      
+    
       
 
     
@@ -299,11 +301,13 @@ public class Robot extends TimedRobot
         if(controller.getLeftBumper())
         {
           BananaBrake.changeBrakeState();
-        }
-        if(BananaBrake.brakeOn == true)
+
+          if(BananaBrake.brakeOn == true)
           {
             BananaBrake.Brake(0.2);
           }
+        }
+        
         
 
     /*--------------------------------------------------------------------------
