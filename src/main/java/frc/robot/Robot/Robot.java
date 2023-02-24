@@ -147,22 +147,29 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Brake: Left Power", BananaBrake.getLeftBrakePower());
     SmartDashboard.putNumber("Brake: Reft Power", BananaBrake.getRightBrakePower());
 
-    double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+
+
+    //double targetOffsetAngle_Vertical = ty.getDouble(0.0);
 
     // how many degrees back is your limelight rotated from perfectly vertical?
-    double limelightMountAngleDegrees = 25.0;
+    //double limelightMountAngleDegrees = 25.0;
   
+
+
+
+
+
     // distance from the center of the Limelight lens to the floor
-    double limelightLensHeightInches = 35.5;//WILL CHANGE THIS BECAUSE WE ARE USING A NEW ROBOT
+    //double limelightLensHeightInches = 35.5;//WILL CHANGE THIS BECAUSE WE ARE USING A NEW ROBOT
   
     // distance from the target to the floor
-    double goalHeightInches = 104.0;//WILL CHANGE BECAUSE THE GOALS ARE NOW DIFFERENT (MIGHT NOT EVEN NEED HEIGHT SINCE WE WORK IN INCHES)
+    //double goalHeightInches = 104.0;//WILL CHANGE BECAUSE THE GOALS ARE NOW DIFFERENT (MIGHT NOT EVEN NEED HEIGHT SINCE WE WORK IN INCHES)
   
-    double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;//AGAIN WE MAY NOT NEED THIS
-    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);//DOUBLE CHECK IF WE ARE GOING TO BE DOING IT THIS WAY)
+    //double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;//AGAIN WE MAY NOT NEED THIS
+    //double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);//DOUBLE CHECK IF WE ARE GOING TO BE DOING IT THIS WAY)
   
     //calculate distance
-    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)/Math.tan(angleToGoalRadians); //(COULD POTENTIALLY USE THIS TO TELL
+    //double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)/Math.tan(angleToGoalRadians); //(COULD POTENTIALLY USE THIS TO TELL
                                                                                                                             //THE ROBOT WHEN TO STOP IN FRONT OF
                                                                                                                             //THE GOAL TO BEGIN RAISING THE ARM,
                                                                                                                             //THEN TO MOVE CLOSER TO SCORE THE GOAL

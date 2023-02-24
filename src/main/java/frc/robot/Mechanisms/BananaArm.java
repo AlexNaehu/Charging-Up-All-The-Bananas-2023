@@ -14,17 +14,17 @@
  */
 package frc.robot.Mechanisms;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+//import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
+//import edu.wpi.first.wpilibj.XboxController;
 
-import com.ctre.phoenix.motorcontrol.can.BaseMotorController; //used to make VictorSPX motors follow eachother
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.IMotorController;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+//import com.ctre.phoenix.motorcontrol.can.BaseMotorController; //used to make VictorSPX motors follow eachother
+//import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+//import com.ctre.phoenix.motorcontrol.IMotorController;
+//import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot.BananaConstants;
+//import frc.robot.Robot.BananaConstants;
 import frc.robot.Robot.*;
 import edu.wpi.first.wpilibj.AnalogInput;
 
@@ -40,7 +40,7 @@ private WPI_VictorSPX rightAngler = new WPI_VictorSPX(29);
 
 private Thread pivotThread;
 
-private Timer pivotTimer = new Timer();
+//private Timer pivotTimer = new Timer();
 
 
 
@@ -114,8 +114,8 @@ public BananaArm(){
             final double kP = 0.005;//0.007
             final double kD = 0.0005; 
             final double kI = 0.0000;//0.00001
-            final double kA = 0.0022;//0.0077;
-            final double kF = 0.0;//-0.05;
+            //final double kA = 0.0022;//0.0077;
+            //final double kF = 0.0;//-0.05;
 
             double power;            
 
@@ -149,7 +149,7 @@ public BananaArm(){
             armTargetHit = false;
             
 
-            while(armTargetHit == false && getPivotAngle() < ARM_PIVOT_MAX_ANGLE)
+            while(armTargetHit == false && getPivotAngle() < ARM_PIVOT_MAX_ANGLE && getPivotAngle() > ARM_PIVOT_MIN_ANGLE)
             {
                
                     runPivotPID = true;

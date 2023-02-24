@@ -1,7 +1,7 @@
 package frc.robot.Mechanisms;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+//import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+//import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -11,13 +11,13 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
+//import edu.wpi.first.wpilibj.TimedRobot;
+//import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot.BananaConstants;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import frc.robot.Robot.BananaConstants;
 
 public class BananaDriveTrain {
     private CANSparkMax Rdrive1;
@@ -32,7 +32,7 @@ public class BananaDriveTrain {
 
     
 
-    private Thread aimPID;
+    
 
   
 
@@ -44,9 +44,9 @@ public class BananaDriveTrain {
     private double left_command = 0;
     private double right_command = 0;
     
-    private final double SPARKMAX_INTEGRATED_ENC_CNTS_PER_REV      = 2048.0;
-    private final double DRVTRAIN_WHEEL_RADIUS                    = 2;
-    private final double DRVTRAIN_WHEEL_CIRCUMFERENCE             = (2.0 * Math.PI * DRVTRAIN_WHEEL_RADIUS);
+    //private final double SPARKMAX_INTEGRATED_ENC_CNTS_PER_REV      = 2048.0;
+    //private final double DRVTRAIN_WHEEL_RADIUS                    = 2;
+    //private final double DRVTRAIN_WHEEL_CIRCUMFERENCE             = (2.0 * Math.PI * DRVTRAIN_WHEEL_RADIUS);
 
     public static boolean aimPIDState = false;
 
@@ -58,8 +58,8 @@ public class BananaDriveTrain {
     /*----------------------------------------------------------------------------------------------
     *  Autonomous Closed Loop Control - Velocity
     *---------------------------------------------------------------------------------------------*/
-    private final int DRVTRAIN_VELOCITY_PID_IDX = 0;
-    private final int PID_TIMEOUT_MS            = 10;
+    //private final int DRVTRAIN_VELOCITY_PID_IDX = 0;
+    //private final int PID_TIMEOUT_MS            = 10;
 
     public final double RT_PID_P = 0.04;  
     public final double RT_PID_I = 0.0; 
@@ -67,7 +67,7 @@ public class BananaDriveTrain {
     public final double RT_PID_F = 1080.0/20480.0; 
 
 
-    private      double drvStraightTargetVelocityOffsetFwd = 50.0;
+    //private      double drvStraightTargetVelocityOffsetFwd = 50.0;
     
     public static boolean turnTargetHit = false;
  
@@ -177,7 +177,7 @@ public class BananaDriveTrain {
     //For auton, maybe do PID turn
 
     public void aimPID(){
-        aimPID = new Thread(() ->
+        new Thread(() ->
     {
       float kAimP = -0.1f;  //may need to calibrate kAimP or min_command if aiming causes occilation
       float min_command = 0.05f;
