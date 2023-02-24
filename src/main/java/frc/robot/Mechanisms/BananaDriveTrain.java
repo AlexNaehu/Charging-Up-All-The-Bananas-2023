@@ -41,7 +41,7 @@ public class BananaDriveTrain {
 
     private DifferentialDrive drivebase;
 
-    private double left_command = 0;
+    public double left_command = 0;
     private double right_command = 0;
     
     //private final double SPARKMAX_INTEGRATED_ENC_CNTS_PER_REV      = 2048.0;
@@ -208,6 +208,7 @@ public class BananaDriveTrain {
           }
           left_command += steering_adjust;
           right_command -= steering_adjust;
+          drivebase.tankDrive(left_command, right_command);
       }
 
       
