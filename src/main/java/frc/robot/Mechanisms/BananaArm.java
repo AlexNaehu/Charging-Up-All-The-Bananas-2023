@@ -143,14 +143,16 @@ public BananaArm(){
             double kPPow;
             double kDPow;
             double kIPow;
-
             
-
-            boolean runPivotPID = true;
+            boolean runPivotPID;
+            
+            armTargetHit = false;
+            
 
             while(armTargetHit == false && getPivotAngle() < ARM_PIVOT_MAX_ANGLE)
             {
                
+                    runPivotPID = true;
                 
                     SmartDashboard.putBoolean("pivot pid state", runPivotPID);
                     currentTime = pivotTimer.get();
@@ -212,8 +214,8 @@ public BananaArm(){
                         Timer.delay(ARM_PIVOT_THREAD_WAITING_TIME);
                     }
                         if(getPivotAngle()==getPivotTargetAngle()){
-                            leftAngler.set(0);
-                            rightAngler.set(0);
+                            //leftAngler.set(0);
+                            //rightAngler.set(0);
                             armTargetHit = true;
                         }
             }

@@ -7,6 +7,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,6 +30,12 @@ public class BananaDriveTrain {
     private static int Ldrive1ID = 20;
     private static int Ldrive2ID = 23;
 
+    
+
+    private Thread aimPID;
+
+  
+
     //private MotorControllerGroup RIGHT;
     //private MotorControllerGroup LEFT;
 
@@ -38,7 +48,8 @@ public class BananaDriveTrain {
     private final double DRVTRAIN_WHEEL_RADIUS                    = 2;
     private final double DRVTRAIN_WHEEL_CIRCUMFERENCE             = (2.0 * Math.PI * DRVTRAIN_WHEEL_RADIUS);
 
-   
+    public static boolean aimPIDState = false;
+
     public  double         currentEncCountsToInches = 0.0;
  
     //private Thread turnThread;
@@ -165,7 +176,43 @@ public class BananaDriveTrain {
 
     //For auton, maybe do PID turn
 
-    
+    public void aimPID(){
+        aimPID = new Thread(() ->
+    {
+      float kAimP = -0.1f;  //may need to calibrate kAimP or min_command if aiming causes occilation
+      float min_command = 0.05f;
+  
+      NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+      NetworkTableEntry tx = table.getEntry("tx");
+      float x = tx.getFloat(0.0f);
+
+      aimPIDState = false;
+
+  
+      while (aimPIDState==true)
+      {
+
+          float heading_error = -x;
+          float steering_adjust = 0.0f;
+  
+          if (Math.abs(heading_error) > 1.0)
+          {
+                  if (heading_error < 0)
+                  {
+                          steering_adjust = kAimP*heading_error + min_command;
+                  }
+                  else
+                  {
+                          steering_adjust = kAimP*heading_error - min_command;
+                  }
+          }
+          left_command += steering_adjust;
+          right_command -= steering_adjust;
+      }
+
+      
+    });
+    }
     
 
 
