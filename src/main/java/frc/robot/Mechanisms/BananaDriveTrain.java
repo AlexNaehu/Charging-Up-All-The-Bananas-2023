@@ -224,19 +224,19 @@ public class BananaDriveTrain {
         double temp = -999.0;
         switch (id)
         {
-            case 27:
+            case 21:
                 temp = Rdrive1.getMotorTemperature();
             break;
 
-            case 28:
+            case 22:
                 temp = Rdrive2.getMotorTemperature();
             break;
 
-            case 26:
+            case 20:
                 temp = Ldrive1.getMotorTemperature();
             break;
                 
-            case 25:
+            case 23:
                 temp = Ldrive2.getMotorTemperature();
             break;
 

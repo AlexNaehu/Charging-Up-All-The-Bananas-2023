@@ -198,7 +198,7 @@ public BananaArm(){
                                 //arm extension distance + 13 is the distance from pivot to wrist
                                 // + kF; //+ (kI * integral)
 
-                        //turnPivot(-power);
+                        SmartDashboard.putNumber("Arm Power", power);
 
                         //should probably make angler 2 follow angler 1 somehow
                         leftAngler.set(-power);

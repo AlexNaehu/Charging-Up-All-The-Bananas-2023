@@ -123,11 +123,11 @@ public class Robot extends TimedRobot
 
 
     //DriveBase
-    //SmartDashboard.putBoolean("Aim PID State", aimPIDState);
-    SmartDashboard.putNumber("FR Motor Temperature", driveTrain.getMotorTemperature(27));
-    SmartDashboard.putNumber("BR Motor Temperature", driveTrain.getMotorTemperature(28));
-    SmartDashboard.putNumber("FL Motor Temperature", driveTrain.getMotorTemperature(26));
-    SmartDashboard.putNumber("BL Motor Temperature", driveTrain.getMotorTemperature(25));
+    SmartDashboard.putBoolean("Aim PID State", BananaDriveTrain.aimPIDState);
+    SmartDashboard.putNumber("FR Motor Temperature", driveTrain.getMotorTemperature(21));
+    SmartDashboard.putNumber("BR Motor Temperature", driveTrain.getMotorTemperature(22));
+    SmartDashboard.putNumber("FL Motor Temperature", driveTrain.getMotorTemperature(20));
+    SmartDashboard.putNumber("BL Motor Temperature", driveTrain.getMotorTemperature(23));
     
     
     //Arm          
@@ -135,7 +135,7 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("PIVOT: Target Angle", arm.getPivotTargetAngle());
     SmartDashboard.putNumber("PIVOT: Encoder Voltage", BananaArm.armPivotEnc.getVoltage());
     SmartDashboard.putNumber("PIVOT: Encoder Angle", arm.getPivotAngle());
-    //TODO: SmartDashboard.putNumber("pivot power", arm.getPivotPower());
+    
 
     //Claw
     SmartDashboard.putBoolean("Claw: Open State", BananaClaw.isIntakeOpen());
