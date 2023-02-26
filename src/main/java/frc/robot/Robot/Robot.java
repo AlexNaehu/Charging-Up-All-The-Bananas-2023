@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
-//Below Imports are from the PhantomBanana
+
 import frc.robot.Autonomous.BananaDriveStraight;
 import frc.robot.Autonomous.BananaTurn;
 
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot
     
     //arm.setPivotTargetAngle(arm.getPivotAngle());
     arm.pivotPID();
-    driveTrain.aimPID();
+    driveTrain.coneAimPID();
 
     
   }
@@ -221,8 +221,8 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
      
     
-    while(controller.getRightStickButtonPressed()){
-      BananaDriveTrain.aimPIDState = true;
+    while(controller.getRightStickButton()){
+      BananaDriveTrain.aimPIDState = !(BananaDriveTrain.aimPIDState);
       
     }
     

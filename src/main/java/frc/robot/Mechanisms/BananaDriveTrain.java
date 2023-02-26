@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import frc.robot.Robot.BananaConstants;
+import frc.robot.Robot.Robot;
 
 public class BananaDriveTrain {
     private CANSparkMax Rdrive1;
@@ -176,7 +177,7 @@ public class BananaDriveTrain {
 
     //For auton, maybe do PID turn
 
-    public void aimPID(){
+    public void coneAimPID(){
         new Thread(() ->
     {
       float kAimP = -0.1f;  //may need to calibrate kAimP or min_command if aiming causes occilation
@@ -186,12 +187,13 @@ public class BananaDriveTrain {
       NetworkTableEntry tx = table.getEntry("tx");
       float x = tx.getFloat(0.0f);
 
-      aimPIDState = false;
+      
 
   
       while (aimPIDState==true)
       {
 
+          //float heading_error = -x;
           float heading_error = -x;
           float steering_adjust = 0.0f;
   
