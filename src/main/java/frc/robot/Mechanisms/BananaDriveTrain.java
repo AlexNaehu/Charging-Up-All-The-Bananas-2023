@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import frc.robot.Robot.BananaConstants;
-import frc.robot.Robot.Robot;
+//import frc.robot.Robot.Robot;
 
 public class BananaDriveTrain {
     private CANSparkMax Rdrive1;
@@ -210,14 +210,21 @@ public class BananaDriveTrain {
           }
           left_command += steering_adjust;
           right_command -= steering_adjust;
-          drivebase.tankDrive(left_command, right_command);
+
+          if (Math.abs(left_command) <= 1 && Math.abs(right_command) <= 1)
+            {
+                drivebase.tankDrive(left_command, right_command);
+            }
       }
 
       
     });
     }
     
+    public void cubeAimPID(){
 
+        
+    }
 
 
 

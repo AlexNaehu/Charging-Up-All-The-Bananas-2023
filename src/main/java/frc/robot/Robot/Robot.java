@@ -221,7 +221,7 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
      
     
-    while(controller.getRightStickButton()){
+    if(controller.getRightStickButton()){
       BananaDriveTrain.aimPIDState = !(BananaDriveTrain.aimPIDState);
       
     }
