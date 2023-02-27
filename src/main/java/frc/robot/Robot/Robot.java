@@ -3,36 +3,35 @@ package frc.robot.Robot;
 //Utilizes all mechanisms for the robot and runs their programs to perform each function
 
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+//import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+//import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+//import com.revrobotics.CANSparkMax;
+//import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 //import edu.wpi.first.hal.ThreadsJNI;
-import edu.wpi.first.networktables.NetworkTable;
+//import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.net.PortForwarder;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+//import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+//import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
 
-import frc.robot.Autonomous.BananaDriveStraight;
-import frc.robot.Autonomous.BananaTurn;
-
-
+//import frc.robot.Autonomous.BananaDriveStraight;
+//import frc.robot.Autonomous.BananaTurn;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Mechanisms.BananaArm;
 import frc.robot.Mechanisms.BananaBrake;
 import frc.robot.Mechanisms.BananaClaw;
 import frc.robot.Mechanisms.BananaDriveTrain;
-import frc.robot.Mechanisms.BananaBrake;
-import frc.robot.Mechanisms.BananaClaw;
+import frc.robot.Vision.SensorObject;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -47,6 +46,7 @@ public class Robot extends TimedRobot
   public static BananaDriveTrain  driveTrain;
   public static BananaBrake      brake;
   public static BananaClaw        claw;
+  public static SensorObject    sensor;
 
   //private static XboxController xboxDrv;
   private static XboxController controller ;
@@ -54,7 +54,14 @@ public class Robot extends TimedRobot
   //private static final int XBOX_DRV_PORT = 0;
   private static final int XBOX_DRV_PORT = 0;
 
-  
+  private static final String LeftScoreMob = "LeftScoreMob";
+  private static final String LeftScorePark = "LeftScorePark";
+  private static final String MidScoreMob = "MidScoreMob";
+  private static final String MidScorePark = "MidScorePark";
+  private static final String BotScoreMob = "BotScoreMob";
+  private static final String BotScorePark = "BotScorePark";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   @Override
   public void robotInit() 
@@ -76,15 +83,23 @@ public class Robot extends TimedRobot
     claw = new BananaClaw();
     brake       = new BananaBrake();
   
+    sensor = new SensorObject();
+
     //xboxDrv    = new XboxController(XBOX_DRV_PORT);
     controller    = new XboxController(XBOX_DRV_PORT);
 
     
     
     /*--------------------------------------------------------------------------
-    *  Initialize Vision
+    *  Initialize Auton
     *-------------------------------------------------------------------------*/
-    //might not need to
+    m_chooser.setDefaultOption("LeftScoreMob", LeftScoreMob);
+    m_chooser.addOption("LeftScorePark", LeftScorePark);
+    m_chooser.addOption("MidScoreMob", MidScoreMob);
+    m_chooser.addOption("MidScorePark", MidScorePark);
+    m_chooser.addOption("BotScoreMob", BotScoreMob);
+    m_chooser.addOption("BotScorePark", BotScorePark);
+    SmartDashboard.putData("Auto choices", m_chooser);
 
     /*--------------------------------------------------------------------------
     *  Engage Mechanical Brakes, Set Target Angles to Current Angles & Start
@@ -93,8 +108,12 @@ public class Robot extends TimedRobot
     
     
     //arm.setPivotTargetAngle(arm.getPivotAngle());
+    
     arm.pivotPID();
     driveTrain.coneAimPID();
+    driveTrain.cubeAimPID();
+    sensor.sensorObject();
+
 
     
   }
@@ -103,7 +122,20 @@ public class Robot extends TimedRobot
   @Override
   public void robotPeriodic() 
   {
-         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //AHHHHHHHHHHHHHHHHHHHH
+    //NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableInstance table = NetworkTableInstance.getDefault();
 
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
@@ -120,6 +152,9 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Limelight Y", y);
     SmartDashboard.putNumber("Limelight Area", area); //area of FOV that the target takes up
     SmartDashboard.putNumber("Limelight Valid Target", v);//0 for no valid target, 1 for valid target
+
+    //WebCam (May be able to utilize limelight to perform april tag sensoring)
+    //SmartDashboard.putNumber("April Tag Center X:", result.getCenterX());
 
 
     //DriveBase
@@ -178,12 +213,40 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit() 
   {
+
+    m_autoSelected = m_chooser.getSelected();
+    System.out.println("Auto selected: " + m_autoSelected);
+
     initializeRobotPositions();
+
   }
 
   @Override
   public void autonomousPeriodic()
   {
+
+    switch (m_autoSelected) {
+      case BotScorePark:
+        // Put custom auto code here
+        break;
+      case BotScoreMob:
+        // Put custom auto code here
+        break;
+      case MidScorePark:
+        // Put custom auto code here
+        break;
+      case MidScoreMob:
+        // Put custom auto code here
+        break;
+      case LeftScorePark:
+        // Put custom auto code here
+        break;
+      case LeftScoreMob:
+      default:
+        // Put default auto code here
+        break;
+    }
+
     robotControls();
   }
 

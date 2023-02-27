@@ -7,18 +7,20 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+//import edu.wpi.first.networktables.NetworkTable;
+//import edu.wpi.first.networktables.NetworkTableEntry;
+//import edu.wpi.first.networktables.NetworkTableInstance;
 
 //import edu.wpi.first.wpilibj.TimedRobot;
 //import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 //import frc.robot.Robot.BananaConstants;
 //import frc.robot.Robot.Robot;
+
 
 public class BananaDriveTrain {
     private CANSparkMax Rdrive1;
@@ -72,6 +74,8 @@ public class BananaDriveTrain {
     
     public static boolean turnTargetHit = false;
  
+    private Thread coneThread;
+    private Thread cubeThread;
  
     public BananaDriveTrain()
     {
@@ -169,7 +173,7 @@ public class BananaDriveTrain {
     
     public void tankDrive(double L, double R){
 
-        drivebase.tankDrive(L*0.5, R*0.5);
+        drivebase.tankDrive(L*0.5, R*0.5);  //set to half speed for now, may change for competition
 
     }
 
@@ -178,22 +182,29 @@ public class BananaDriveTrain {
     //For auton, maybe do PID turn
 
     public void coneAimPID(){
-        new Thread(() ->
+        coneThread = new Thread(() ->
     {
       float kAimP = -0.1f;  //may need to calibrate kAimP or min_command if aiming causes occilation
       float min_command = 0.05f;
   
-      NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-      NetworkTableEntry tx = table.getEntry("tx");
-      float x = tx.getFloat(0.0f);
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      //NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+      
+      float x = (float) SmartDashboard.getNumber("tx", 0.0f);
+      double validTarget = SmartDashboard.getNumber("tv", 0.0);  
 
       
 
   
-      while (aimPIDState==true)
+      while (aimPIDState==true && validTarget == 1)
       {
 
-          //float heading_error = -x;
+         
           float heading_error = -x;
           float steering_adjust = 0.0f;
   
@@ -215,15 +226,91 @@ public class BananaDriveTrain {
             {
                 drivebase.tankDrive(left_command, right_command);
             }
+
+        //Stop motors if target hit within close accuracy
+        if (Math.abs(heading_error) < 1.0){
+            left_command = 0;
+            right_command = 0;
+            drivebase.tankDrive(0, 0);
+        }
+        
       }
 
       
     });
+        coneThread.setDaemon(true);
+        coneThread.start();
     }
     
+
+
+
+
     public void cubeAimPID(){
 
-        
+        cubeThread = new Thread(() ->
+    {
+      float kAimP = -0.1f;  //may need to calibrate kAimP or min_command if aiming causes occilation
+      float min_command = 0.05f;
+  
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      //AHHHHHHHHHHHHHHHHHHHH
+      // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+      
+
+      float x = (float) SmartDashboard.getNumber("Center X", 0.0f);
+      double validTarget = SmartDashboard.getNumber("tv", 0.0);
+
+
+
+      while (aimPIDState==true && validTarget == 0) //checks that we are in aiming mode AND limelight 
+                                                    //isn't focusing on a reflective target so that
+                                                    //we dont have two aimPID's running simultaneously
+
+                                                    //MAY HAVE TO REVISE HOW TO DISTINGUISH CONE V. CUBE
+                                                    //AIM PIDS
+      {
+
+          
+          float heading_error = -x;
+          float steering_adjust = 0.0f;
+  
+          if (Math.abs(heading_error) > 1.0)
+          {
+                  if (heading_error < 0)
+                  {
+                          steering_adjust = kAimP*heading_error + min_command;
+                  }
+                  else
+                  {
+                          steering_adjust = kAimP*heading_error - min_command;
+                  }
+          }
+          left_command += steering_adjust;
+          right_command -= steering_adjust;
+
+          if (Math.abs(left_command) <= 1 && Math.abs(right_command) <= 1)
+            {
+                drivebase.tankDrive(left_command, right_command);
+            }
+
+        //Stop motors if target hit within close accuracy
+        if (Math.abs(heading_error) < 1.0){
+            left_command = 0;
+            right_command = 0;
+            drivebase.tankDrive(0, 0);
+        }
+      }
+
+      
+    });
+        cubeThread.setDaemon(true);
+        cubeThread.start();
+
     }
 
 
