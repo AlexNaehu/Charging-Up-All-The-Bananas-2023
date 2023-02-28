@@ -31,7 +31,7 @@ public class BananaBrake {
 
     public static void changeBrakeState()
     {
-        brakeOn = true;
+        brakeOn = !brakeOn;
     }
     public static void Brake(double power) //can only turn brake on, not off
     {
