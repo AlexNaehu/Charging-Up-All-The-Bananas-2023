@@ -87,6 +87,16 @@ public BananaArm(){
         targetAngle = angle;
     }
 
+    public static void increaseTargetAngle()
+    {
+        targetAngle+=0.1;
+    }
+
+    public static void decreaseTargetAngle()
+    {
+        targetAngle-=0.1;
+    }
+
     public void setArmTargetHit(boolean state)
     {
         armTargetHit = state;

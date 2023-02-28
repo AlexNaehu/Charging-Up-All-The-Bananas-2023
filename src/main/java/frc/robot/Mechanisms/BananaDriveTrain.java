@@ -205,7 +205,7 @@ public class BananaDriveTrain {
       {
 
          
-          float heading_error = -x;
+          float heading_error = -x; //figure out what x values limelight produces for the target in order to scale kAimP
           float steering_adjust = 0.0f;
   
           if (Math.abs(heading_error) > 1.0)
@@ -250,8 +250,8 @@ public class BananaDriveTrain {
 
         cubeThread = new Thread(() ->
     {
-      float kAimP = -0.1f;  //may need to calibrate kAimP or min_command if aiming causes occilation
-      float min_command = 0.05f;
+      float kAimP = -0.0005f;  //may need to calibrate kAimP or min_command if aiming causes occilation
+      float min_command = 0.005f;
   
       //AHHHHHHHHHHHHHHHHHHHH
       //AHHHHHHHHHHHHHHHHHHHH
@@ -275,8 +275,8 @@ public class BananaDriveTrain {
                                                     //AIM PIDS
       {
 
-          
-          float heading_error = -x;
+          //Trying to make the heading error 0 relative to the center of the usb camera display
+          float heading_error = -x+320;//half the width (in pixels) of the camera display
           float steering_adjust = 0.0f;
   
           if (Math.abs(heading_error) > 1.0)
