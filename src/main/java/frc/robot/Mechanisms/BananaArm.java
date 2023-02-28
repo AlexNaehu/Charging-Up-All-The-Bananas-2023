@@ -223,6 +223,8 @@ public BananaArm(){
         });
         pivotThread.setDaemon(true);
         pivotThread.start();
+
+        
         
     }
 }
