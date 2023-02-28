@@ -13,9 +13,11 @@ package frc.robot.Robot;
 //import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.net.PortForwarder;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 //import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -62,6 +64,8 @@ public class Robot extends TimedRobot
   private static final String BotScorePark = "BotScorePark";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  private DifferentialDriveOdometry odometry;
 
   @Override
   public void robotInit() 
@@ -115,6 +119,8 @@ public class Robot extends TimedRobot
     sensor.sensorObject();
 
 
+    var timer = new Timer();
+    timer.start();
     
   }
 
@@ -305,7 +311,7 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
       
     
-      
+    
       
     
        /*-----------------------------------------------------------------------
@@ -345,7 +351,7 @@ public class Robot extends TimedRobot
         {
           BananaBrake.changeBrakeState();
 
-          if(BananaBrake.brakeOn == true)
+          if(BananaBrake.brakeOn == true)//may have to change to a while loop
           {
             BananaBrake.Brake(0.2);
           }

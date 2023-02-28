@@ -315,6 +315,16 @@ public class BananaDriveTrain {
 
 
 
+    public static void balance()
+    {
+        if (BananaBrake.isBrakeOn() == true){
+            
+        }
+    }
+
+
+
+
      public double getMotorTemperature(int id)
     {
         double temp = -999.0;

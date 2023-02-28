@@ -39,14 +39,14 @@ public class BananaClaw {
     }
     public static void closeClaw(double power)
     {
-        leftFinger.set(power);
-        rightFinger.set(-power);
+        leftFinger.set(-power);
+        rightFinger.set(power);
     }
 
     public static void openClaw(double power)
     {
-        leftFinger.set(-power);
-        rightFinger.set(power);
+        leftFinger.set(power);
+        rightFinger.set(-power);
     }
 
     public static boolean isIntakeOpen()
