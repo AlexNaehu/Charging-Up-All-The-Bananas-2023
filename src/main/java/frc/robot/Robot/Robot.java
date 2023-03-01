@@ -313,7 +313,8 @@ public class Robot extends TimedRobot
     
     while (controller.getRightTriggerAxis() > 0.8)
     {
-      BananaArm.increaseTargetAngle();
+      //BananaArm.increaseTargetAngle();
+      BananaArm.testMotors();
     }
 
     while (controller.getLeftTriggerAxis() > 0.8)

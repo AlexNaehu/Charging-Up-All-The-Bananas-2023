@@ -32,8 +32,8 @@ import edu.wpi.first.wpilibj.AnalogInput;
 
 public class BananaArm{
 
-private WPI_VictorSPX leftAngler = new WPI_VictorSPX(28);
-private WPI_VictorSPX rightAngler = new WPI_VictorSPX(29);
+private static WPI_VictorSPX leftAngler = new WPI_VictorSPX(28); //made both of these static
+private static WPI_VictorSPX rightAngler = new WPI_VictorSPX(29);
 
 
 
@@ -71,6 +71,11 @@ public BananaArm(){
     }
 
 
+    public static void testMotors()
+    {
+        leftAngler.set(0.4);
+        rightAngler.set(0.4);
+    }
 
     public double getPivotAngle() 
     {   
