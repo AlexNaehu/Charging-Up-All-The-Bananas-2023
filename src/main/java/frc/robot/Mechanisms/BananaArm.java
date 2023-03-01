@@ -71,10 +71,16 @@ public BananaArm(){
     }
 
 
-    public static void testMotors()
+    public static void testMotorsUp()
     {
-        leftAngler.set(0.4);
-        rightAngler.set(0.4);
+        leftAngler.set(-0.2);
+        rightAngler.set(-0.2);
+    }
+
+    public static void testMotorsDown()
+    {
+        leftAngler.set(0.2);
+        rightAngler.set(0.2);
     }
 
     public double getPivotAngle() 
