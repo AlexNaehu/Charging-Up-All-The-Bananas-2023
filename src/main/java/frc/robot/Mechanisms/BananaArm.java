@@ -45,8 +45,8 @@ private Thread pivotThread;
 
 
 private static volatile double targetAngle;
-private static final double ARM_PIVOT_MAX_ANGLE = 110.0;   //Robot 0 deg = Arm pointing straight down
-private static final double ARM_PIVOT_MIN_ANGLE = 0.0;     //TBD, the reason for 100 is so an error of 
+private static final double ARM_PIVOT_MAX_ANGLE = 333.0;   //Robot 0 deg = Arm pointing straight down
+private static final double ARM_PIVOT_MIN_ANGLE = 233.0;     //TBD, the reason for 100 is so an error of 
                                                             //10 degrees overshoot wont break the code
 
 private static double PIVOT_VOLTAGE_OFFSET = 0.0;//may change if the motors require higher voltage.

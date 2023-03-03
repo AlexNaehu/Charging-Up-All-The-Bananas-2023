@@ -111,7 +111,7 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
     
     
-    //arm.setPivotTargetAngle(arm.getPivotAngle());
+    arm.setPivotTargetAngle(arm.getPivotAngle());
     
     arm.pivotPID();
     driveTrain.coneAimPID();

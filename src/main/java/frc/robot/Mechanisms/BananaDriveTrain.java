@@ -173,7 +173,7 @@ public class BananaDriveTrain {
     
     public void tankDrive(double L, double R){
 
-        drivebase.tankDrive(L*0.5, R*0.5);  //set to half speed for now, may change for competition
+        drivebase.tankDrive(-L*0.5, -R*0.5);  //set to half speed for now, may change for competition
 
     }
 
@@ -203,7 +203,7 @@ public class BananaDriveTrain {
       
 
   
-      while (aimPIDState==true && validTarget == 1)
+      while (aimPIDState==true && validTarget == 1.0)
       {
 
          
@@ -240,7 +240,6 @@ public class BananaDriveTrain {
 
       
     });
-        coneThread.setDaemon(true);
         coneThread.start();
     }
     
@@ -271,7 +270,7 @@ public class BananaDriveTrain {
 
 
 
-      while (aimPIDState==true /*&& validTarget == 0*/) //checks that we are in aiming mode AND limelight 
+      while (aimPIDState==true && validTarget == 0.0) //checks that we are in aiming mode AND limelight 
                                                     //isn't focusing on a reflective target so that
                                                     //we dont have two aimPID's running simultaneously
 
@@ -313,7 +312,6 @@ public class BananaDriveTrain {
 
       
     });
-        cubeThread.setDaemon(true);
         cubeThread.start();
 
     }
