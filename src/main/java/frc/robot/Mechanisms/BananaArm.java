@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class BananaArm{
 
 private static WPI_VictorSPX leftAngler = new WPI_VictorSPX(28); //made both of these static
-private static WPI_VictorSPX rightAngler = new WPI_VictorSPX(29);
+private static WPI_VictorSPX rightAngler = new WPI_VictorSPX(24);
 
 
 
@@ -61,7 +61,11 @@ private static final double ARM_PIVOT_ENC_MAX_VOLTAGE     = 4.784;
 
 
 public static boolean armTargetHit = false;
+public static boolean up = false;
+public static boolean down = false;
+private static double command = 0.0;
 
+private static final double INPUT_THRESHOLD = 1.0E-3;
 
 public BananaArm(){
 
@@ -73,15 +77,19 @@ public BananaArm(){
 
     public static void testMotorsUp()
     {
-        leftAngler.set(-0.2);
-        rightAngler.set(-0.2);
+        
+        leftAngler.set(command -= Robot.controller.getRightTriggerAxis() * 0.05);
+        rightAngler.set(command -= Robot.controller.getRightTriggerAxis() * 0.05);
+        
     }
 
     public static void testMotorsDown()
     {
-        leftAngler.set(0.2);
-        rightAngler.set(0.2);
+        leftAngler.set(command += Robot.controller.getLeftTriggerAxis() * 0.05);
+        rightAngler.set(command += Robot.controller.getLeftTriggerAxis() * 0.05);
     }
+
+    
 
     public double getPivotAngle() 
     {   
@@ -146,6 +154,7 @@ public BananaArm(){
             double previousError = 0;
             double currentError; 
             double deltaError = 2; 
+            double ta = getPivotTargetAngle();  //target angle
 
             double previousDerivative = 0;
             double currentDerivative;    // in case you want to filter derivative
@@ -170,7 +179,8 @@ public BananaArm(){
             armTargetHit = false;
             
 
-            while(armTargetHit == false && getPivotAngle() < ARM_PIVOT_MAX_ANGLE && getPivotAngle() > ARM_PIVOT_MIN_ANGLE)
+            //while(armTargetHit == false && getPivotAngle() < ARM_PIVOT_MAX_ANGLE && getPivotAngle() > ARM_PIVOT_MIN_ANGLE)
+            while(true)
             {
                
                     runPivotPID = true;
@@ -179,10 +189,10 @@ public BananaArm(){
                     currentTime = pivotTimer.get();
                     currentAngle = getPivotAngle();
 
-                    currentError = targetAngle - currentAngle;
+                    currentError = ta - currentAngle;
                     
                     //accuracy checker (within 1 degree of goal)
-                    if(Math.abs(deltaError) < 1.0)
+                    /*if(Math.abs(deltaError) < 1.0)
                     {
                        if((pivotTimer.get() - currentTime) > 0.1)
                        {
@@ -193,9 +203,9 @@ public BananaArm(){
                        }    
                           
                     }
+                    */
 
-                    if(runPivotPID == true)
-                    {
+                    
                         deltaError = currentError - previousError;
                         deltaTime = currentTime - previousTime;
 
@@ -222,8 +232,10 @@ public BananaArm(){
                         SmartDashboard.putNumber("Arm Power", power);
 
                         //should probably make angler 2 follow angler 1 somehow
-                        leftAngler.set(-power);
-                        rightAngler.set(-power);
+                        pivotArm(power);
+
+                        //leftAngler.set(-power);
+                        //rightAngler.set(-power);
 
                         SmartDashboard.putNumber("pivot error", currentError);
                     
@@ -233,7 +245,7 @@ public BananaArm(){
                         previousDerivative = currentDerivative;
                     
                         Timer.delay(ARM_PIVOT_THREAD_WAITING_TIME);
-                    }
+                    
                         if(getPivotAngle()==getPivotTargetAngle()){
                             //leftAngler.set(0);
                             //rightAngler.set(0);
@@ -242,8 +254,67 @@ public BananaArm(){
             }
                 
         });
-        pivotThread.setDaemon(true);
+        //pivotThread.setDaemon(true);
         pivotThread.start();
         
+    }
+
+    public void pivotArm(double power){
+
+        double pivotAngle = this.getPivotAngle();
+
+        if(Math.abs(power) <= INPUT_THRESHOLD)
+            {
+                setPivotTargetAngle(pivotAngle);
+            }
+            else if (power > 0.0)
+            {
+
+                if (pivotAngle > ARM_PIVOT_MAX_ANGLE)
+                {
+                    leftAngler.set(0.0);
+                    rightAngler.set(0.0);
+                }
+                    else
+                    {
+                        leftAngler.set(-power);
+                        rightAngler.set(-power); //rotate arm clockwise which means up
+                    }
+            }
+            else if (power < 0.0)
+            {
+
+                if (pivotAngle < ARM_PIVOT_MIN_ANGLE)
+                {
+                    leftAngler.set(0.0);
+                    rightAngler.set(0.0);
+                }
+                    else{
+                        leftAngler.set(power);
+                        rightAngler.set(power); //rotate arm counterclockwise which means down
+                    }
+            }
+            
+
+    }
+
+    public double getArmTemp(int id)
+    {
+        double temp = -999.0;
+        switch (id)
+        {
+
+            case 24:
+                temp = rightAngler.getTemperature();
+            break;
+
+            case 28:
+                temp = leftAngler.getTemperature();
+            break;
+
+            default :
+                temp = -999.0;          
+        }
+        return temp; 
     }
 }

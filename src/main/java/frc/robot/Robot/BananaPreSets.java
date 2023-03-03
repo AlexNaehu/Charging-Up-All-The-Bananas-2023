@@ -89,20 +89,22 @@ public class BananaPreSets
 
     public static void lvl3RocketBall()
     {
+        Timer.delay(0.3);
         Robot.arm.setPivotTargetAngle(LVL_3_BALL_PIVOT_ANGLE);
         Robot.arm.setArmTargetHit(false);
     }
 
     public static void lvl2RocketBall()
     {
+        Timer.delay(0.3);
         Robot.arm.setPivotTargetAngle(LVL_2_BALL_PIVOT_ANGLE);
         Robot.arm.setArmTargetHit(false);
     }
 
     public static void lvl1RocketBall()
     {
+        Timer.delay(0.3);
         Robot.arm.setPivotTargetAngle(LVL_1_BALL_PIVOT_ANGLE);
-        Timer.delay(0.2);
         Robot.arm.setArmTargetHit(false);
     }
 

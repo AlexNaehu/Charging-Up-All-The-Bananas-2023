@@ -51,7 +51,7 @@ public class Robot extends TimedRobot
   public static SensorObject    sensor;
 
   //private static XboxController xboxDrv;
-  private static XboxController controller ;
+  public static XboxController controller ;
 
   //private static final int XBOX_DRV_PORT = 0;
   private static final int XBOX_DRV_PORT = 0;
@@ -163,6 +163,11 @@ public class Robot extends TimedRobot
     //SmartDashboard.putNumber("April Tag Center X:", result.getCenterX());
 
 
+    SmartDashboard.putNumber("Left Command", BananaDriveTrain.left_command);
+    SmartDashboard.putNumber("Right Command", BananaDriveTrain.right_command);
+    BananaDriveTrain.x = (float) SmartDashboard.getNumber("Center X", 0.0f);
+    SmartDashboard.putNumber("ex", BananaDriveTrain.x);
+    
     //DriveBase
     SmartDashboard.putBoolean("Aim PID State", BananaDriveTrain.aimPIDState);
     SmartDashboard.putNumber("FR Motor Temperature", driveTrain.getMotorTemperature(21));
@@ -176,7 +181,8 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("PIVOT: Target Angle", arm.getPivotTargetAngle());
     SmartDashboard.putNumber("PIVOT: Encoder Voltage", BananaArm.armPivotEnc.getVoltage());
     SmartDashboard.putNumber("PIVOT: Encoder Angle", arm.getPivotAngle());
-    
+    SmartDashboard.putNumber("Right Arm Angler Temperature", arm.getArmTemp(24));
+    SmartDashboard.putNumber("Left Angler Temperature", arm.getArmTemp(28));
 
     //Claw
     SmartDashboard.putBoolean("Claw: Open State", BananaClaw.isIntakeOpen());
@@ -311,18 +317,18 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
       
     
-    while (controller.getRightTriggerAxis() > 0.8)
+    while (controller.getRightTriggerAxis() >= 0.8)
     {
       //BananaArm.increaseTargetAngle();
-      BananaArm.testMotorsUp();
+      //BananaArm.testMotorsUp();
     }
 
 
 
-    while (controller.getLeftTriggerAxis() > 0.8)
+    while (controller.getLeftTriggerAxis() >= 0.8)
     {
       //BananaArm.decreaseTargetAngle();
-      BananaArm.testMotorsDown();
+      //BananaArm.testMotorsDown();
     }
       
     

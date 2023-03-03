@@ -44,8 +44,8 @@ public class BananaDriveTrain {
 
     private DifferentialDrive drivebase;
 
-    public double left_command = 0;
-    private double right_command = 0;
+    public static double left_command = 0;
+    public static double right_command = 0;
     
     //private final double SPARKMAX_INTEGRATED_ENC_CNTS_PER_REV      = 2048.0;
     //private final double DRVTRAIN_WHEEL_RADIUS                    = 2;
@@ -90,7 +90,7 @@ public class BananaDriveTrain {
         MotorControllerGroup RIGHT = new MotorControllerGroup(Rdrive1, Rdrive2);
         MotorControllerGroup LEFT = new MotorControllerGroup(Ldrive1, Ldrive2);
 
-       drivebase = new DifferentialDrive(RIGHT, LEFT); 
+       drivebase = new DifferentialDrive(LEFT, RIGHT); 
 
        Rdrive1.restoreFactoryDefaults();
        Rdrive2.restoreFactoryDefaults();
@@ -184,9 +184,11 @@ public class BananaDriveTrain {
     public void coneAimPID(){
         coneThread = new Thread(() ->
     {
-      float kAimP = -0.1f;  //may need to calibrate kAimP or min_command if aiming causes occilation
-      float min_command = 0.05f;
+      float kAimP = -0.01f;  //may need to calibrate kAimP or min_command if aiming causes occilation
+      float min_command = 0.0005f;
   
+      float cone_heading_error;
+      float steering_adjust;
       //AHHHHHHHHHHHHHHHHHHHH
       //AHHHHHHHHHHHHHHHHHHHH
       //AHHHHHHHHHHHHHHHHHHHH
@@ -205,18 +207,18 @@ public class BananaDriveTrain {
       {
 
          
-          float heading_error = -x; //figure out what x values limelight produces for the target in order to scale kAimP
-          float steering_adjust = 0.0f;
+          cone_heading_error = -x; //figure out what x values limelight produces for the target in order to scale kAimP
+          steering_adjust = 0.0f;
   
-          if (Math.abs(heading_error) > 1.0)
+          if (Math.abs(cone_heading_error) > 1.0)
           {
-                  if (heading_error < 0)
+                  if (cone_heading_error < 0)
                   {
-                          steering_adjust = kAimP*heading_error + min_command;
+                          steering_adjust = kAimP*cone_heading_error + min_command;
                   }
                   else
                   {
-                          steering_adjust = kAimP*heading_error - min_command;
+                          steering_adjust = kAimP*cone_heading_error - min_command;
                   }
           }
           left_command += steering_adjust;
@@ -228,7 +230,7 @@ public class BananaDriveTrain {
             }
 
         //Stop motors if target hit within close accuracy
-        if (Math.abs(heading_error) < 1.0){
+        if (Math.abs(cone_heading_error) < 1.0){
             left_command = 0;
             right_command = 0;
             drivebase.tankDrive(0, 0);
@@ -243,16 +245,18 @@ public class BananaDriveTrain {
     }
     
 
-
-
+    public static float x;
+    
 
     public void cubeAimPID(){
 
         cubeThread = new Thread(() ->
     {
-      float kAimP = -0.0005f;  //may need to calibrate kAimP or min_command if aiming causes occilation
-      float min_command = 0.005f;
+      float kAimP = -0.000005f;  //may need to calibrate kAimP or min_command if aiming causes occilation
+      float min_command = 0.000005f;
   
+      float cube_heading_error;
+      float steering_adjust;
       //AHHHHHHHHHHHHHHHHHHHH
       //AHHHHHHHHHHHHHHHHHHHH
       //AHHHHHHHHHHHHHHHHHHHH
@@ -262,12 +266,12 @@ public class BananaDriveTrain {
       // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
       
 
-      float x = (float) SmartDashboard.getNumber("Center X", 0.0f);
+      x = (float) SmartDashboard.getNumber("Center X", 0.0f);
       double validTarget = SmartDashboard.getNumber("tv", 0.0);
 
 
 
-      while (aimPIDState==true && validTarget == 0) //checks that we are in aiming mode AND limelight 
+      while (aimPIDState==true /*&& validTarget == 0*/) //checks that we are in aiming mode AND limelight 
                                                     //isn't focusing on a reflective target so that
                                                     //we dont have two aimPID's running simultaneously
 
@@ -276,22 +280,23 @@ public class BananaDriveTrain {
       {
 
           //Trying to make the heading error 0 relative to the center of the usb camera display
-          float heading_error = -x+320;//half the width (in pixels) of the camera display
-          float steering_adjust = 0.0f;
+          cube_heading_error = -x+320;//half the width (in pixels) of the camera display
+          steering_adjust = 0.0f;
   
-          if (Math.abs(heading_error) > 1.0)
+          if (Math.abs(cube_heading_error) > 1.0)
           {
-                  if (heading_error < 0)
+                  if (cube_heading_error < 0)
                   {
-                          steering_adjust = kAimP*heading_error + min_command;
+                          steering_adjust = kAimP*cube_heading_error + min_command;
                   }
                   else
                   {
-                          steering_adjust = kAimP*heading_error - min_command;
+                          steering_adjust = kAimP*cube_heading_error - min_command;
                   }
           }
           left_command += steering_adjust;
           right_command -= steering_adjust;
+          
 
           if (Math.abs(left_command) <= 1 && Math.abs(right_command) <= 1)
             {
@@ -299,7 +304,7 @@ public class BananaDriveTrain {
             }
 
         //Stop motors if target hit within close accuracy
-        if (Math.abs(heading_error) < 1.0){
+        if (Math.abs(cube_heading_error) < 1.0){
             left_command = 0;
             right_command = 0;
             drivebase.tankDrive(0, 0);
