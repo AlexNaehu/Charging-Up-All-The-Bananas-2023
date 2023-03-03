@@ -45,9 +45,9 @@ private Thread pivotThread;
 
 
 private static volatile double targetAngle;
-private static final double ARM_PIVOT_MAX_ANGLE = 333.0;   //Robot 0 deg = Arm pointing straight down
-private static final double ARM_PIVOT_MIN_ANGLE = 233.0;     //TBD, the reason for 100 is so an error of 
-                                                            //10 degrees overshoot wont break the code
+private static final double ARM_PIVOT_MAX_ANGLE = 310.0;   //Robot 0 deg = Arm pointing straight down
+private static final double ARM_PIVOT_MIN_ANGLE = 235.0;     //TBD, the reason for 110 range is to give wiggle
+                                                            // room for oscillations
 
 private static double PIVOT_VOLTAGE_OFFSET = 0.0;//may change if the motors require higher voltage.
     // may need an offset if the motor voltage requirement is higher than the max limit of the analog input
@@ -141,7 +141,7 @@ public BananaArm(){
         {
             final double ARM_PIVOT_THREAD_WAITING_TIME = 0.005;
             final double kP = 0.005;//0.007
-            final double kD = 0.0005; 
+            final double kD = 0.0000;//0.0005; 
             final double kI = 0.0000;//0.00001
             //final double kA = 0.0022;//0.0077;
             //final double kF = 0.0;//-0.05;
@@ -153,7 +153,7 @@ public BananaArm(){
 
             double previousError = 0;
             double currentError; 
-            double deltaError = 2; 
+            double deltaError = 0; 
             double ta = getPivotTargetAngle();  //target angle
 
             double previousDerivative = 0;
@@ -290,8 +290,8 @@ public BananaArm(){
                     rightAngler.set(0.0);
                 }
                     else{
-                        leftAngler.set(power);
-                        rightAngler.set(power); //rotate arm counterclockwise which means down
+                        leftAngler.set(-power);
+                        rightAngler.set(-power); //rotate arm counterclockwise which means down
                     }
             }
             

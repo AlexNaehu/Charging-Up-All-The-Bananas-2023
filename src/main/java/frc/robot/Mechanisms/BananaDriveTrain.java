@@ -189,13 +189,6 @@ public class BananaDriveTrain {
   
       float cone_heading_error;
       float steering_adjust;
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      //NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
       
       float x = (float) SmartDashboard.getNumber("tx", 0.0f);
       double validTarget = SmartDashboard.getNumber("tv", 0.0);  
@@ -256,14 +249,6 @@ public class BananaDriveTrain {
   
       float cube_heading_error;
       float steering_adjust;
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      //AHHHHHHHHHHHHHHHHHHHH
-      // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-      
 
       x = (float) SmartDashboard.getNumber("Center X", 0.0f);
       double validTarget = SmartDashboard.getNumber("tv", 0.0);
