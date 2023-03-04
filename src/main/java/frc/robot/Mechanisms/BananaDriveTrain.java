@@ -173,7 +173,7 @@ public class BananaDriveTrain {
     
     public void tankDrive(double L, double R){
 
-        drivebase.tankDrive(-L*0.5, -R*0.5);  //set to half speed for now, may change for competition
+        drivebase.tankDrive(-L*0.3, -R*0.3);  //set to half speed for now, may change for competition
 
     }
 

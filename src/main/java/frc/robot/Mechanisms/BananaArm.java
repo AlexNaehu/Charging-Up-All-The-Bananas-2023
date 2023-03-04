@@ -38,15 +38,17 @@ private static WPI_VictorSPX rightAngler = new WPI_VictorSPX(24);
 
 
 
-private Thread pivotThread;
+public Thread pivotThread;
 
 //private Timer pivotTimer = new Timer();
 
 
 
-private static volatile double targetAngle;
+public static volatile double targetAngle;
+public static volatile double currentAngle;
+public static volatile double currentError;
 private static final double ARM_PIVOT_MAX_ANGLE = 310.0;   //Robot 0 deg = Arm pointing straight down
-private static final double ARM_PIVOT_MIN_ANGLE = 235.0;     //TBD, the reason for 110 range is to give wiggle
+private static final double ARM_PIVOT_MIN_ANGLE = 230.0;     //TBD, the reason for 110 range is to give wiggle
                                                             // room for oscillations
 
 private static double PIVOT_VOLTAGE_OFFSET = 0.0;//may change if the motors require higher voltage.
@@ -106,14 +108,14 @@ public BananaArm(){
         targetAngle = angle;
     }
 
-    public static void increaseTargetAngle()
+    public void increaseTargetAngle()
     {
-        targetAngle+=0.1;
+        targetAngle+=2.0;
     }
 
-    public static void decreaseTargetAngle()
+    public void decreaseTargetAngle()
     {
-        targetAngle-=0.1;
+        targetAngle-=2.0;
     }
 
     public void setArmTargetHit(boolean state)
@@ -140,7 +142,7 @@ public BananaArm(){
         pivotThread = new Thread(() ->
         {
             final double ARM_PIVOT_THREAD_WAITING_TIME = 0.005;
-            final double kP = 0.005;//0.007
+            final double kP = 0.003;//0.007
             final double kD = 0.0000;//0.0005; 
             final double kI = 0.0000;//0.00001
             //final double kA = 0.0022;//0.0077;
@@ -152,9 +154,9 @@ public BananaArm(){
             pivotTimer.start();
 
             double previousError = 0;
-            double currentError; 
+            //double currentError; 
             double deltaError = 0; 
-            double ta = getPivotTargetAngle();  //target angle
+            //target angle instantiated above
 
             double previousDerivative = 0;
             double currentDerivative;    // in case you want to filter derivative
@@ -165,7 +167,7 @@ public BananaArm(){
             double deltaTime;
             
             double currentTime;
-            double currentAngle;
+            //double currentAngle;
 
             double integral = 0;
 
@@ -181,15 +183,24 @@ public BananaArm(){
 
             //while(armTargetHit == false && getPivotAngle() < ARM_PIVOT_MAX_ANGLE && getPivotAngle() > ARM_PIVOT_MIN_ANGLE)
             while(true)
-            {
+            {       
+                if(targetAngle == BananaConstants.INVALID_ANGLE)
+                {
+                    runPivotPID = false;
+                    
+                    Timer.delay(BananaConstants.CONTROLLER_INPUT_WAIT_TIME);
+                }
+                else
+                {
                
+
                     runPivotPID = true;
                 
-                    SmartDashboard.putBoolean("pivot pid state", runPivotPID);
+                    
                     currentTime = pivotTimer.get();
                     currentAngle = getPivotAngle();
 
-                    currentError = ta - currentAngle;
+                    currentError = targetAngle - currentAngle;
                     
                     //accuracy checker (within 1 degree of goal)
                     /*if(Math.abs(deltaError) < 1.0)
@@ -237,7 +248,7 @@ public BananaArm(){
                         //leftAngler.set(-power);
                         //rightAngler.set(-power);
 
-                        SmartDashboard.putNumber("pivot error", currentError);
+                        
                     
                         previousError = currentError;
                         previousTime = currentTime;
@@ -251,6 +262,8 @@ public BananaArm(){
                             //rightAngler.set(0);
                             armTargetHit = true;
                         }
+                }
+                SmartDashboard.putBoolean("pivot pid state", runPivotPID);
             }
                 
         });
@@ -270,10 +283,10 @@ public BananaArm(){
             else if (power > 0.0)
             {
 
-                if (pivotAngle > ARM_PIVOT_MAX_ANGLE)
+                if (pivotAngle > ARM_PIVOT_MAX_ANGLE || Math.abs(power) > 1.0)
                 {
-                    leftAngler.set(0.0);
-                    rightAngler.set(0.0);
+                    leftAngler.set(0.09);
+                    rightAngler.set(0.09);
                 }
                     else
                     {
@@ -284,10 +297,10 @@ public BananaArm(){
             else if (power < 0.0)
             {
 
-                if (pivotAngle < ARM_PIVOT_MIN_ANGLE)
+                if (pivotAngle < ARM_PIVOT_MIN_ANGLE || Math.abs(power) > 1.0)
                 {
-                    leftAngler.set(0.0);
-                    rightAngler.set(0.0);
+                    leftAngler.set(0.09);
+                    rightAngler.set(0.09);
                 }
                     else{
                         leftAngler.set(-power);
