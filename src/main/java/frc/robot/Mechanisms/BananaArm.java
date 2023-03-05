@@ -44,9 +44,9 @@ public Thread pivotThread;
 
 
 
-public static volatile double targetAngle;
-public  static volatile double currentAngle;
-public static volatile double currentError;
+private static volatile double targetAngle;
+private  static volatile double currentAngle;
+private static volatile double currentError;
 
 private static final double ARM_PIVOT_MAX_ANGLE = 310.0;   //Robot 0 deg = Arm pointing straight down
 private static final double ARM_PIVOT_MIN_ANGLE = 230.0;     //TBD, the reason for 110 range is to give wiggle

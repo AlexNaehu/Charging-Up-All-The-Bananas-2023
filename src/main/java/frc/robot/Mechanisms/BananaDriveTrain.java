@@ -33,16 +33,16 @@ public class BananaDriveTrain {
     private static int Ldrive1ID = 20;
     private static int Ldrive2ID = 23;
 
-    private DifferentialDrive drivebase;
+    private static DifferentialDrive drivebase;
 
-    public static double left_command = 0;
-    public static double right_command = 0;
+    public double left_command = 0;
+    public double right_command = 0;
     
     //private final double SPARKMAX_INTEGRATED_ENC_CNTS_PER_REV      = 2048.0;
     //private final double DRVTRAIN_WHEEL_RADIUS                    = 2;
     //private final double DRVTRAIN_WHEEL_CIRCUMFERENCE             = (2.0 * Math.PI * DRVTRAIN_WHEEL_RADIUS);
 
-    public static boolean aimPIDState = false;
+    public boolean aimPIDState = false;
 
     public  double         currentEncCountsToInches = 0.0;
  
@@ -129,7 +129,7 @@ public class BananaDriveTrain {
     }
 
     
-    public void tankDrive(double L, double R){
+    public static void tankDrive(double L, double R){
 
         drivebase.tankDrive(-L*0.3, -R*0.3);  //set to half speed for now, may change for competition
 
@@ -296,6 +296,7 @@ public class BananaDriveTrain {
     }
 
 
+    
     /*----------------------------------------------------------------------------------------------
     *
     *  Miscellaneous Methods

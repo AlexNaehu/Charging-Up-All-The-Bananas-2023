@@ -45,12 +45,12 @@ public class BananaBrake {
         return brakeOn;
     }
 
-    public static double getLeftBrakePower()
+    public double getLeftBrakePower()
     {
         return leftBrake.get();
     }
 
-    public static double getRightBrakePower()
+    public double getRightBrakePower()
     {
         return rightBrake.get();
     }

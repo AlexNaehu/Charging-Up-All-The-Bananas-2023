@@ -49,17 +49,17 @@ public class BananaClaw {
         rightFinger.set(-power);
     }
 
-    public static boolean isIntakeOpen()
+    public boolean isIntakeOpen()
     {
         return intakeOpen;
     }
 
-    public static double getLeftFingerPower()
+    public double getLeftFingerPower()
     {
         return leftFinger.get();
     }
 
-    public static double getRightFingerPower()
+    public double getRightFingerPower()
     {
         return rightFinger.get();
     }

@@ -8,6 +8,7 @@ package frc.robot.Robot;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import com.kauailabs.navx.frc.AHRS;
 
 //import edu.wpi.first.hal.ThreadsJNI;
 //import edu.wpi.first.networktables.NetworkTable;
@@ -52,10 +53,11 @@ public class Robot extends TimedRobot
 
   //private static final double LEFT_DEADBAND_THRESHOLD = 0.15;
   //private static final double RIGHT_DEADBAND_THRESHOLD = 0.15;
-  double pThr = 0.0;
+  //double pThr = 0.0;
 
   //private boolean armPIDState = false;
 
+  public static AHRS navx;
   
   public static XboxController controller1;
   public static XboxController controller2;
@@ -73,7 +75,7 @@ public class Robot extends TimedRobot
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private DifferentialDriveOdometry odometry;
+  //private DifferentialDriveOdometry odometry;
 
   @Override
   public void robotInit() 
@@ -97,21 +99,20 @@ public class Robot extends TimedRobot
   
     sensor = new SensorObject();
 
-    
+    navx = new AHRS();
+
     controller1    = new XboxController(XBOX_PORT_1);
     controller2    = new XboxController(XBOX_PORT_2);
 
-    
+    //odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), leftEncoder.getDistance(), rightEncoder.getDistance(), new Pose2d(5.0, 13.5, new Rotation2d()));
     
     /*--------------------------------------------------------------------------
     *  Initialize Auton
     *-------------------------------------------------------------------------*/
     m_chooser.setDefaultOption("LeftScoreMob", LeftScoreMob);
-    m_chooser.addOption("LeftScorePark", LeftScorePark);
-    m_chooser.addOption("MidScoreMob", MidScoreMob);
     m_chooser.addOption("MidScorePark", MidScorePark);
     m_chooser.addOption("BotScoreMob", BotScoreMob);
-    m_chooser.addOption("BotScorePark", BotScorePark);
+   
     SmartDashboard.putData("Auto choices", m_chooser);
 
     /*--------------------------------------------------------------------------
@@ -169,17 +170,16 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Limelight Area", area); //area of FOV that the target takes up
     SmartDashboard.putNumber("Limelight Valid Target", v);//0 for no valid target, 1 for valid target
 
-    //WebCam (May be able to utilize limelight to perform april tag sensoring)
-    //SmartDashboard.putNumber("April Tag Center X:", result.getCenterX());
+    
 
 
-    SmartDashboard.putNumber("Left Command", BananaDriveTrain.left_command);
-    SmartDashboard.putNumber("Right Command", BananaDriveTrain.right_command);
+    SmartDashboard.putNumber("Left Command", driveTrain.left_command);
+    SmartDashboard.putNumber("Right Command", driveTrain.right_command);
    
     
     
     //DriveBase
-    SmartDashboard.putBoolean("Aim PID State", BananaDriveTrain.aimPIDState);
+    SmartDashboard.putBoolean("Aim PID State", driveTrain.aimPIDState);
     SmartDashboard.putNumber("FR Motor Temperature", driveTrain.getMotorTemperature(21));
     SmartDashboard.putNumber("BR Motor Temperature", driveTrain.getMotorTemperature(22));
     SmartDashboard.putNumber("FL Motor Temperature", driveTrain.getMotorTemperature(20));
@@ -196,14 +196,14 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Left Angler Temperature", arm.getArmTemp(28));
 
     //Claw
-    SmartDashboard.putBoolean("Claw: Open State", BananaClaw.isIntakeOpen());
-    SmartDashboard.putNumber("Claw: Left Power", BananaClaw.getLeftFingerPower());
-    SmartDashboard.putNumber("Claw: Right Power", BananaClaw.getRightFingerPower());
+    SmartDashboard.putBoolean("Claw: Open State", claw.isIntakeOpen());
+    SmartDashboard.putNumber("Claw: Left Power", claw.getLeftFingerPower());
+    SmartDashboard.putNumber("Claw: Right Power", claw.getRightFingerPower());
 
     //Brake
     SmartDashboard.putBoolean("Brake: On State", BananaBrake.isBrakeOn());
-    SmartDashboard.putNumber("Brake: Left Power", BananaBrake.getLeftBrakePower());
-    SmartDashboard.putNumber("Brake: Reft Power", BananaBrake.getRightBrakePower());
+    SmartDashboard.putNumber("Brake: Left Power", brake.getLeftBrakePower());
+    SmartDashboard.putNumber("Brake: Reft Power", brake.getRightBrakePower());
 
 
 
@@ -284,7 +284,7 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
     
-    driveTrain.tankDrive(controller1.getLeftY(), controller1.getRightY());
+    BananaDriveTrain.tankDrive(controller1.getLeftY(), controller1.getRightY());
 
 
     /*--------------------------------------------------------------------------
@@ -292,7 +292,7 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
 
     if(controller1.getAButton()){
-      BananaDriveTrain.aimPIDState = !(BananaDriveTrain.aimPIDState);
+      driveTrain.aimPIDState = !(driveTrain.aimPIDState);
     }
  
     /*--------------------------------------------------------------------------
@@ -380,17 +380,17 @@ public class Robot extends TimedRobot
                         Preset Arm Positions
     *-------------------------------------------------------------------------*/
      
-    if(controller2.getStartButton()) // START BUTTON
+    if(controller1.getStartButton()) // START BUTTON // 2
     {
       BananaPreSets.neutralPivotAngle();
     }
 
-    if(controller2.getBackButton()) // BACK BUTTON
+    if(controller1.getBackButton()) // BACK BUTTON // 2
     {
       BananaPreSets.hatchPickUp();
     }
 
-    if(controller2.getAButton()) // A BUTTON
+    if(controller1.getAButton()) // A BUTTON // 2
     {
       BananaPreSets.cargoPickUp();
     }
@@ -402,19 +402,19 @@ public class Robot extends TimedRobot
     *                   Preset Arm Positions
     *-------------------------------------------------------------------------*/
      
-    if(controller2.getBButton())
+    if(controller1.getBButton())
     {
-      BananaPreSets.lvl3RocketBall(); // B BUTTON
+      BananaPreSets.lvl3RocketBall(); // B BUTTON // 2
     }
 
-    if(controller2.getYButton())
+    if(controller1.getYButton())
     {
-      BananaPreSets.lvl2RocketBall(); // Y BUTTON
+      BananaPreSets.lvl2RocketBall(); // Y BUTTON // 2
     }
 
-    if(controller2.getXButton())
+    if(controller1.getXButton())
     {
-      BananaPreSets.lvl1RocketBall(); // X BUTTON
+      BananaPreSets.lvl1RocketBall(); // X BUTTON // 2
     }
     
     
