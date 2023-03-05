@@ -7,6 +7,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+
+
 //import edu.wpi.first.networktables.NetworkTable;
 //import edu.wpi.first.networktables.NetworkTableEntry;
 //import edu.wpi.first.networktables.NetworkTableInstance;
@@ -18,8 +20,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-//import frc.robot.Robot.BananaConstants;
-//import frc.robot.Robot.Robot;
 
 
 public class BananaDriveTrain {
@@ -32,15 +32,6 @@ public class BananaDriveTrain {
     private static int Rdrive2ID = 22;
     private static int Ldrive1ID = 20;
     private static int Ldrive2ID = 23;
-
-    
-
-    
-
-  
-
-    //private MotorControllerGroup RIGHT;
-    //private MotorControllerGroup LEFT;
 
     private DifferentialDrive drivebase;
 
@@ -103,8 +94,6 @@ public class BananaDriveTrain {
      
        RIGHT.setInverted(true); 
 
-       //Rdrive1.setInverted(true);
-       //Rdrive2.setInverted(true);
      
         
 
@@ -113,41 +102,10 @@ public class BananaDriveTrain {
        //setDriveTrainPIDConfiguration(LEFT, LT_PID_P, LT_PID_I, LT_PID_D, LT_PID_F); //TBD Only used for autonomous
        //setDriveTrainPIDConfiguration(RIGHT, RT_PID_P, RT_PID_I, RT_PID_D, RT_PID_F);
      
-      /*----------------------------------------------------------------------------------------------
-    *
-    *  Closed Loop Control Methods
-    *
-    *---------------------------------------------------------------------------------------------*/
+      
     }
      
-      /*  public void setDriveTrainPIDConfiguration(MotorControllerGroup side, double kP, double kI, double kD, double kF) 
-    {
-
-        //Configure PID Gain Constants
-        if (side == LEFT) 
-        {
-             //Configure feedback device for PID loop
-             //Change Talon to SparkMax
-            Ldrive1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, DRVTRAIN_VELOCITY_PID_IDX,
-                                                                                                PID_TIMEOUT_MS);
-            Ldrive1.config_kP(DRVTRAIN_VELOCITY_PID_IDX, kP);
-            Ldrive1.config_kI(DRVTRAIN_VELOCITY_PID_IDX, kI);
-            Ldrive1.config_kD(DRVTRAIN_VELOCITY_PID_IDX, kD);
-            Ldrive1.config_kF(DRVTRAIN_VELOCITY_PID_IDX, kF);
-
-        } 
-        else 
-        {
-            Rdrive1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, DRVTRAIN_VELOCITY_PID_IDX, 
-                                                                                                PID_TIMEOUT_MS);
-            Rdrive1.config_kP(DRVTRAIN_VELOCITY_PID_IDX, kP);
-            Rdrive1.config_kI(DRVTRAIN_VELOCITY_PID_IDX, kI);
-            Rdrive1.config_kD(DRVTRAIN_VELOCITY_PID_IDX, kD);
-            Rdrive1.config_kF(DRVTRAIN_VELOCITY_PID_IDX, kF);
-        }
-         
-    }   //End of setDriveTrainPIDConfiguration()
-     */
+      
        
      /*----------------------------------------------------------------------------------------------
     *
@@ -178,8 +136,13 @@ public class BananaDriveTrain {
     }
 
 
-
     //For auton, maybe do PID turn
+
+    /*----------------------------------------------------------------------------------------------
+    *
+    *  Closed Loop Control Methods
+    *
+    *---------------------------------------------------------------------------------------------*/
 
     public void coneAimPID(){
         coneThread = new Thread(() ->
@@ -190,21 +153,28 @@ public class BananaDriveTrain {
       float cone_heading_error;
       float steering_adjust;
       
-      float x = (float) SmartDashboard.getNumber("tx", 0.0f);
+      float limeX = (float) SmartDashboard.getNumber("tx", 0.0f);
       double validTarget = SmartDashboard.getNumber("tv", 0.0);  
 
       
 
   
-      while (aimPIDState==true && validTarget == 1.0)
+      while (true)
       {
+        if(aimPIDState==false || validTarget == 0.0)
+        {
+            break;
+        }
+
+            else if(aimPIDState==true && validTarget == 1.0)
+            {
 
          
-          cone_heading_error = -x; //figure out what x values limelight produces for the target in order to scale kAimP
-          steering_adjust = 0.0f;
+            cone_heading_error = -(limeX); //figure out what x values limelight produces for the target in order to scale kAimP
+            steering_adjust = 0.0f;
   
-          if (Math.abs(cone_heading_error) > 1.0)
-          {
+                if (Math.abs(cone_heading_error) > 1.0)
+                {
                   if (cone_heading_error < 0)
                   {
                           steering_adjust = kAimP*cone_heading_error + min_command;
@@ -213,22 +183,21 @@ public class BananaDriveTrain {
                   {
                           steering_adjust = kAimP*cone_heading_error - min_command;
                   }
-          }
-          left_command += steering_adjust;
-          right_command -= steering_adjust;
+                }
+            left_command += steering_adjust;
+            right_command -= steering_adjust;
 
-          if (Math.abs(left_command) <= 1 && Math.abs(right_command) <= 1)
+                //Stop motors if target hit within close accuracy
+            if (Math.abs(cone_heading_error) < 1.0)
             {
-                drivebase.tankDrive(left_command, right_command);
-            }
-
-        //Stop motors if target hit within close accuracy
-        if (Math.abs(cone_heading_error) < 1.0){
             left_command = 0;
             right_command = 0;
             drivebase.tankDrive(0, 0);
-        }
+            }
+
+            aimBot(left_command, right_command);
         
+            }   
       }
 
       
@@ -237,7 +206,7 @@ public class BananaDriveTrain {
     }
     
 
-    public static float x;
+    
     
 
     public void cubeAimPID(){
@@ -250,49 +219,54 @@ public class BananaDriveTrain {
       float cube_heading_error;
       float steering_adjust;
 
-      x = (float) SmartDashboard.getNumber("Center X", 0.0f);
+      float aprilX = (float) SmartDashboard.getNumber("Center X", 0.0f);
       double validTarget = SmartDashboard.getNumber("tv", 0.0);
 
 
 
-      while (aimPIDState==true && validTarget == 0.0) //checks that we are in aiming mode AND limelight 
+      while (true)                                  //checks that we are in aiming mode AND limelight 
                                                     //isn't focusing on a reflective target so that
                                                     //we dont have two aimPID's running simultaneously
 
                                                     //MAY HAVE TO REVISE HOW TO DISTINGUISH CONE V. CUBE
                                                     //AIM PIDS
       {
+        if(aimPIDState==false || validTarget==1.0)
+        {
+            break;
+        }
 
-          //Trying to make the heading error 0 relative to the center of the usb camera display
-          cube_heading_error = -x+320;//half the width (in pixels) of the camera display
-          steering_adjust = 0.0f;
+            else if(aimPIDState==true && validTarget == 0.0)
+            {
+
+            //Trying to make the heading error 0 relative to the center of the usb camera display
+            cube_heading_error = -(aprilX+320);//half the width (in pixels) of the camera display
+            steering_adjust = 0.0f;
   
-          if (Math.abs(cube_heading_error) > 1.0)
-          {
-                  if (cube_heading_error < 0)
-                  {
-                          steering_adjust = kAimP*cube_heading_error + min_command;
-                  }
+            if (Math.abs(cube_heading_error) > 1.0)
+            {
+                if (cube_heading_error < 0)
+                {
+                    steering_adjust = kAimP*cube_heading_error + min_command;
+                }
                   else
                   {
-                          steering_adjust = kAimP*cube_heading_error - min_command;
+                    steering_adjust = kAimP*cube_heading_error - min_command;
                   }
-          }
-          left_command += steering_adjust;
-          right_command -= steering_adjust;
-          
-
-          if (Math.abs(left_command) <= 1 && Math.abs(right_command) <= 1)
-            {
-                drivebase.tankDrive(left_command, right_command);
             }
+        left_command += steering_adjust;
+        right_command -= steering_adjust;
 
-        //Stop motors if target hit within close accuracy
-        if (Math.abs(cube_heading_error) < 1.0){
+        //Stop motors if target hit within close accuracy (10 pixels)
+        if (Math.abs(cube_heading_error) < 15.0){
             left_command = 0;
             right_command = 0;
-            drivebase.tankDrive(0, 0);
         }
+
+        aimBot(left_command, right_command);
+
+        }
+
       }
 
       
@@ -301,6 +275,17 @@ public class BananaDriveTrain {
 
     }
 
+    public void aimBot(double left_command, double right_command)
+    {
+        if(Math.abs(left_command) < 0.01 && Math.abs(right_command) < 0.01)
+        {
+            drivebase.tankDrive(0, 0);
+        }
+            else if(Math.abs(left_command) <= 1 && Math.abs(right_command) <= 1)
+            {
+                drivebase.tankDrive(left_command, right_command);
+            }
+    }
 
 
     public static void balance()
@@ -311,6 +296,11 @@ public class BananaDriveTrain {
     }
 
 
+    /*----------------------------------------------------------------------------------------------
+    *
+    *  Miscellaneous Methods
+    *
+    *---------------------------------------------------------------------------------------------*/
 
 
      public double getMotorTemperature(int id)

@@ -45,8 +45,9 @@ public Thread pivotThread;
 
 
 public static volatile double targetAngle;
-public static volatile double currentAngle;
+public  static volatile double currentAngle;
 public static volatile double currentError;
+
 private static final double ARM_PIVOT_MAX_ANGLE = 310.0;   //Robot 0 deg = Arm pointing straight down
 private static final double ARM_PIVOT_MIN_ANGLE = 230.0;     //TBD, the reason for 110 range is to give wiggle
                                                             // room for oscillations
@@ -57,7 +58,7 @@ private static double PIVOT_VOLTAGE_OFFSET = 0.0;//may change if the motors requ
 
 
 
-public static AnalogInput armPivotEnc;
+public AnalogInput armPivotEnc;
 private static final int    ARM_PIVOT_ENCODER_ANALOG_PORT = 0;
 private static final double ARM_PIVOT_ENC_MAX_VOLTAGE     = 4.784;
 
@@ -80,15 +81,15 @@ public BananaArm(){
     public static void testMotorsUp()
     {
         
-        leftAngler.set(command -= Robot.controller.getRightTriggerAxis() * 0.05);
-        rightAngler.set(command -= Robot.controller.getRightTriggerAxis() * 0.05);
+        leftAngler.set(command -= Robot.controller2.getRightTriggerAxis() * 0.05);
+        rightAngler.set(command -= Robot.controller2.getRightTriggerAxis() * 0.05);
         
     }
 
     public static void testMotorsDown()
     {
-        leftAngler.set(command += Robot.controller.getLeftTriggerAxis() * 0.05);
-        rightAngler.set(command += Robot.controller.getLeftTriggerAxis() * 0.05);
+        leftAngler.set(command += Robot.controller2.getLeftTriggerAxis() * 0.05);
+        rightAngler.set(command += Robot.controller2.getLeftTriggerAxis() * 0.05);
     }
 
     
@@ -110,12 +111,12 @@ public BananaArm(){
 
     public void increaseTargetAngle()
     {
-        targetAngle+=2.0;
+        targetAngle+=0.1;
     }
 
     public void decreaseTargetAngle()
     {
-        targetAngle-=2.0;
+        targetAngle-=0.1;
     }
 
     public void setArmTargetHit(boolean state)
@@ -142,10 +143,10 @@ public BananaArm(){
         pivotThread = new Thread(() ->
         {
             final double ARM_PIVOT_THREAD_WAITING_TIME = 0.005;
-            final double kP = 0.003;//0.007
+            final double kP = 0.007;//0.007
             final double kD = 0.0000;//0.0005; 
             final double kI = 0.0000;//0.00001
-            //final double kA = 0.0022;//0.0077;
+            final double kA = 0.0022;//0.0077;
             //final double kF = 0.0;//-0.05;
 
             double power;            
@@ -226,7 +227,7 @@ public BananaArm(){
                         //might change filtering
                         filteredDerivative = (0.7 * currentDerivative) + (0.3 * previousDerivative);
 
-                        kAPow = 0; //kA * ((getArmExtensionDistance() + 13) * Math.cos(Math.toRadians(currentAngle - 45)));
+                        kAPow = kA * (Math.cos(Math.toRadians(currentAngle - 321.5)));
                         kPPow = kP * currentError;
                         kDPow = kD * filteredDerivative; //currentDerivative
                         kIPow = kI * integral;
