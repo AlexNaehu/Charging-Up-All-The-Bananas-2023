@@ -64,8 +64,8 @@ public class BananaTurn {
 
 	private static double previousDerivative = 0;
     
-    
-    public BananaTurn(double degreesToTurn, double timeoutSeconds){
+
+    public static void turnPID(double degreesToTurn, double timeoutSeconds){
 
         Robot.navx.reset();
 		Timer.delay(BananaConstants.NAVX_RESET_WAIT_TIME);
@@ -172,14 +172,14 @@ public class BananaTurn {
 
 					//Power will be positive if turning right and negative if turning left
 					 
-					BananaDriveTrain.tankDrive(power*0.7, power); //check logic
+					Robot.driveTrain.tankDrive(power*0.7, power); //check logic
                     Timer.delay(loopDelay);
                 }
             }
         }
         currentAngle = Robot.navx.getAngle();
 
-        BananaDriveTrain.tankDrive(0.0, 0.0); // makes robot stop
+        Robot.driveTrain.tankDrive(0.0, 0.0); // makes robot stop
 	    currentAngle = Robot.navx.getAngle();
                 
         functionTimer.stop();

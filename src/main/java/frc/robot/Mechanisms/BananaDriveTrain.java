@@ -19,6 +19,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot.Robot;
 
 
 
@@ -129,7 +130,7 @@ public class BananaDriveTrain {
     }
 
     
-    public static void tankDrive(double L, double R){
+    public void tankDrive(double L, double R){
 
         drivebase.tankDrive(-L*0.3, -R*0.3);  //set to half speed for now, may change for competition
 
@@ -277,7 +278,7 @@ public class BananaDriveTrain {
 
     public void aimBot(double left_command, double right_command)
     {
-        if(Math.abs(left_command) < 0.01 && Math.abs(right_command) < 0.01)
+        if(Math.abs(left_command) < 0.03 && Math.abs(right_command) < 0.03)
         {
             drivebase.tankDrive(0, 0);
         }
@@ -290,7 +291,7 @@ public class BananaDriveTrain {
 
     public static void balance()
     {
-        if (BananaBrake.isBrakeOn() == true){
+        if (Robot.brake.isBrakeOn() == true){
             
         }
     }

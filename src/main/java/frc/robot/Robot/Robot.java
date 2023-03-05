@@ -14,7 +14,7 @@ import com.kauailabs.navx.frc.AHRS;
 //import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+//import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.net.PortForwarder;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -67,11 +67,9 @@ public class Robot extends TimedRobot
   private static final int XBOX_PORT_2 = 1;
 
   private static final String LeftScoreMob = "LeftScoreMob";
-  private static final String LeftScorePark = "LeftScorePark";
-  private static final String MidScoreMob = "MidScoreMob";
   private static final String MidScorePark = "MidScorePark";
-  private static final String BotScoreMob = "BotScoreMob";
-  private static final String BotScorePark = "BotScorePark";
+  private static final String RightScoreMob = "RightScoreMob";
+  
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -102,7 +100,7 @@ public class Robot extends TimedRobot
     navx = new AHRS();
 
     controller1    = new XboxController(XBOX_PORT_1);
-    controller2    = new XboxController(XBOX_PORT_2);
+    //controller2    = new XboxController(XBOX_PORT_2);
 
     //odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), leftEncoder.getDistance(), rightEncoder.getDistance(), new Pose2d(5.0, 13.5, new Rotation2d()));
     
@@ -111,7 +109,7 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
     m_chooser.setDefaultOption("LeftScoreMob", LeftScoreMob);
     m_chooser.addOption("MidScorePark", MidScorePark);
-    m_chooser.addOption("BotScoreMob", BotScoreMob);
+    m_chooser.addOption("RightScoreMob", RightScoreMob);
    
     SmartDashboard.putData("Auto choices", m_chooser);
 
@@ -120,7 +118,8 @@ public class Robot extends TimedRobot
     *  PID Threads
     *-------------------------------------------------------------------------*/
     
-    
+    navx.reset();
+
     arm.setPivotTargetAngle(arm.getPivotAngle());
     
     arm.pivotPID();
@@ -171,10 +170,8 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Limelight Valid Target", v);//0 for no valid target, 1 for valid target
 
     
-
-
-    SmartDashboard.putNumber("Left Command", driveTrain.left_command);
-    SmartDashboard.putNumber("Right Command", driveTrain.right_command);
+    //Sensors
+    SmartDashboard.putNumber("Robot Orientation", navx.getAngle());
    
     
     
@@ -184,6 +181,8 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("BR Motor Temperature", driveTrain.getMotorTemperature(22));
     SmartDashboard.putNumber("FL Motor Temperature", driveTrain.getMotorTemperature(20));
     SmartDashboard.putNumber("BL Motor Temperature", driveTrain.getMotorTemperature(23));
+    SmartDashboard.putNumber("Left Command", driveTrain.left_command);
+    SmartDashboard.putNumber("Right Command", driveTrain.right_command);
     
     
     //Arm          
@@ -201,7 +200,7 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Claw: Right Power", claw.getRightFingerPower());
 
     //Brake
-    SmartDashboard.putBoolean("Brake: On State", BananaBrake.isBrakeOn());
+    SmartDashboard.putBoolean("Brake: On State", brake.isBrakeOn());
     SmartDashboard.putNumber("Brake: Left Power", brake.getLeftBrakePower());
     SmartDashboard.putNumber("Brake: Reft Power", brake.getRightBrakePower());
 
@@ -249,22 +248,16 @@ public class Robot extends TimedRobot
   {
 
     switch (m_autoSelected) {
-      case BotScorePark:
-        // Put custom auto code here
-        break;
-      case BotScoreMob:
+
+      case RightScoreMob:
         // Put custom auto code here
         break;
       case MidScorePark:
         // Put custom auto code here
         break;
-      case MidScoreMob:
-        // Put custom auto code here
-        break;
-      case LeftScorePark:
-        // Put custom auto code here
-        break;
       case LeftScoreMob:
+        // Put custom auto code here
+      break;
       default:
         // Put default auto code here
         break;
@@ -284,7 +277,7 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
     
-    BananaDriveTrain.tankDrive(controller1.getLeftY(), controller1.getRightY());
+    driveTrain.tankDrive(controller1.getLeftY(), controller1.getRightY());
 
 
     /*--------------------------------------------------------------------------

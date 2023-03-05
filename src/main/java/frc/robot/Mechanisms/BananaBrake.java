@@ -40,7 +40,7 @@ public class BananaBrake {
     }
 
 
-    public static boolean isBrakeOn()
+    public boolean isBrakeOn()
     {
         return brakeOn;
     }
