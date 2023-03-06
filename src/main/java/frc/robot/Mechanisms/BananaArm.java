@@ -146,7 +146,7 @@ public BananaArm(){
             final double kP = 0.007;//0.007
             final double kD = 0.0000;//0.0005; 
             final double kI = 0.0000;//0.00001
-            final double kA = 0.0022;//0.0077;
+            final double kA = 0.0033;//0.0077;
             //final double kF = 0.0;//-0.05;
 
             double power;            

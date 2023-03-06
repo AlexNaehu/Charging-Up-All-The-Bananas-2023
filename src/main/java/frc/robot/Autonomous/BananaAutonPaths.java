@@ -6,20 +6,20 @@ import frc.robot.Robot.Robot;
 
 public class BananaAutonPaths {
     
-    private final double leftHalfTurn = 90.0; //"left turn" means the front right corner whips around CCW
-    private final double leftFullTurn = 180;
-    private final double rightHalfTurn = -90.0; //"right turn" means the front left corner whips around CW
-    private final double rightFullTurn = -180;
+    private final static double leftHalfTurn = 90.0; //"left turn" means the front right corner whips around CCW
+    private final static double leftFullTurn = 180;
+    private final static double rightHalfTurn = -90.0; //"right turn" means the front left corner whips around CW
+    private final static double rightFullTurn = -180;
 
     
 
-    private final int straightForwardSide = 0;
-    private final int straightForwardMid = 1;
-    private final int tipToeForward = 2; //Used for inching onto the charging station and for approaching Scoring
+    private final static int straightForwardSide = 0;
+    private final static int straightForwardMid = 1;
+    private final static int tipToeForward = 2; //Used for inching onto the charging station and for approaching Scoring
 
-    private final int straightBackwardSide = 3;
-    private final int straightBackwardMid = 4;
-    private final int tipToeBackward = 5; //Using for inching into the charging station and for approaching Scoring
+    private final static int straightBackwardSide = 3;
+    private final static int straightBackwardMid = 4;
+    private final static int tipToeBackward = 5; //Using for inching into the charging station and for approaching Scoring
 
 
 
@@ -27,9 +27,9 @@ public class BananaAutonPaths {
 
 
 
-    public void rightScoreMob() //turns left, away from the wall on the right side of the robot
+    public static void rightScoreMob() //turns left, away from the wall on the right side of the robot
     {
-        BananaClaw.closeClaw(0.2);
+        //BananaClaw.closeClaw(0.2);
         BananaPreSets.lvl3RocketBall();
         BananaDriveStraight.driveStraight(tipToeForward);
         //Robot.driveTrain.aimPIDState = true;
@@ -46,9 +46,9 @@ public class BananaAutonPaths {
 
     }
 
-    public void leftScoreMob() //turns right, away from the wall on the left side of the robot
+    public static void leftScoreMob() //turns right, away from the wall on the left side of the robot
     {
-        BananaClaw.closeClaw(0.2);
+        //BananaClaw.closeClaw(0.2);
         BananaPreSets.lvl3RocketBall();
         BananaDriveStraight.driveStraight(tipToeForward);
         //Robot.driveTrain.aimPIDState = true;
@@ -66,9 +66,9 @@ public class BananaAutonPaths {
     }
 
     //turns left, doesn't actually matter which way; also inches onto the charging station
-    public void midScorePark() 
+    public static void midScorePark() 
     {
-        BananaClaw.closeClaw(0.2);
+        //BananaClaw.closeClaw(0.2);
         BananaPreSets.lvl3RocketBall();
         BananaDriveStraight.driveStraight(tipToeForward);
         //Robot.driveTrain.aimPIDState = true;

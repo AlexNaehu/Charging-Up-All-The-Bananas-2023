@@ -10,6 +10,7 @@ package frc.robot.Robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.networktables.NetworkTable;
 //import edu.wpi.first.hal.ThreadsJNI;
 //import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj.XboxController;
 //import frc.robot.Autonomous.BananaTurn;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Autonomous.BananaAutonPaths;
 import frc.robot.Mechanisms.BananaArm;
 import frc.robot.Mechanisms.BananaBrake;
 import frc.robot.Mechanisms.BananaClaw;
@@ -100,7 +102,7 @@ public class Robot extends TimedRobot
     navx = new AHRS();
 
     controller1    = new XboxController(XBOX_PORT_1);
-    //controller2    = new XboxController(XBOX_PORT_2);
+    controller2    = new XboxController(XBOX_PORT_2);
 
     //odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), leftEncoder.getDistance(), rightEncoder.getDistance(), new Pose2d(5.0, 13.5, new Rotation2d()));
     
@@ -150,8 +152,8 @@ public class Robot extends TimedRobot
     //AHHHHHHHHHHHHHHHHHHHH
     //AHHHHHHHHHHHHHHHHHHHH
     //AHHHHHHHHHHHHHHHHHHHH
-    //NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableInstance table = NetworkTableInstance.getDefault();
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    //NetworkTableInstance table = NetworkTableInstance.getDefault();
 
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
@@ -176,13 +178,15 @@ public class Robot extends TimedRobot
     
     
     //DriveBase
-    SmartDashboard.putBoolean("Aim PID State", driveTrain.aimPIDState);
+    SmartDashboard.putBoolean("Aim PID State", BananaDriveTrain.aimPIDState);
     SmartDashboard.putNumber("FR Motor Temperature", driveTrain.getMotorTemperature(21));
     SmartDashboard.putNumber("BR Motor Temperature", driveTrain.getMotorTemperature(22));
     SmartDashboard.putNumber("FL Motor Temperature", driveTrain.getMotorTemperature(20));
     SmartDashboard.putNumber("BL Motor Temperature", driveTrain.getMotorTemperature(23));
-    SmartDashboard.putNumber("Left Command", driveTrain.left_command);
-    SmartDashboard.putNumber("Right Command", driveTrain.right_command);
+    SmartDashboard.putNumber("Cone Left Command", driveTrain.cone_left_command);
+    SmartDashboard.putNumber("Cone Right Command", driveTrain.cone_right_command);
+    SmartDashboard.putNumber("Cube Left Command", driveTrain.cube_left_command);
+    SmartDashboard.putNumber("Cube Right Command", driveTrain.cube_right_command);
     
     
     //Arm          
@@ -197,7 +201,6 @@ public class Robot extends TimedRobot
     //Claw
     SmartDashboard.putBoolean("Claw: Open State", claw.isIntakeOpen());
     SmartDashboard.putNumber("Claw: Left Power", claw.getLeftFingerPower());
-    SmartDashboard.putNumber("Claw: Right Power", claw.getRightFingerPower());
 
     //Brake
     SmartDashboard.putBoolean("Brake: On State", brake.isBrakeOn());
@@ -246,16 +249,19 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousPeriodic()
   {
-
+    /* 
     switch (m_autoSelected) {
 
       case RightScoreMob:
+      BananaAutonPaths.rightScoreMob();
         // Put custom auto code here
         break;
       case MidScorePark:
+      BananaAutonPaths.midScorePark();
         // Put custom auto code here
         break;
       case LeftScoreMob:
+      BananaAutonPaths.leftScoreMob();
         // Put custom auto code here
       break;
       default:
@@ -263,9 +269,9 @@ public class Robot extends TimedRobot
         break;
     }
 
-    
+    */
   }
-
+    
   @Override
   public void teleopInit() 
   {
@@ -277,37 +283,61 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
     
-    driveTrain.tankDrive(controller1.getLeftY(), controller1.getRightY()); // LEFT + RIGHT STICKS // 1
+    robotControls();
+    
+  }
 
+
+  private void robotControls()
+  {
 
     /*--------------------------------------------------------------------------
-    *  DriveBase shifter
+    *  DriveBase Movement - Manual Control (1)
     *-------------------------------------------------------------------------*/
 
+    driveTrain.tankDrive(controller1.getLeftY(), controller1.getRightY()); // LEFT + RIGHT STICKS // 1
+
+    /*--------------------------------------------------------------------------
+    *  DriveBase Movement - AimBot (1)
+    *-------------------------------------------------------------------------*/
+    
     if(controller1.getAButton()) // A BUTTON // 1
     {
-      driveTrain.aimPIDState = !(driveTrain.aimPIDState);
+      BananaDriveTrain.aimPIDState = !(BananaDriveTrain.aimPIDState);
     }
  
     /*--------------------------------------------------------------------------
-    *  Arm Movement - Manual Control
+    *  Claw Movement - Manual Control (1)
     *-------------------------------------------------------------------------*/
 
+    if(controller1.getLeftTriggerAxis()<0.05 && controller1.getRightTriggerAxis()>0.05)
+    {
+      BananaClaw.closeClaw(controller1.getRightTriggerAxis()); // RIGHT TRIGGER // 1
+    }
+    else if (controller1.getLeftTriggerAxis() > 0.05 && controller1.getRightTriggerAxis() < 0.05)
+    {
+      BananaClaw.openClaw(controller1.getLeftTriggerAxis()); // LEFT TRIGGER // 1
+    }
+    else
+    {
+      BananaClaw.closeClaw(0.0); //Stop Motor
+    }
+    
+    /*--------------------------------------------------------------------------
+    *  Arm Movement - Manual Control (1)
+    *-------------------------------------------------------------------------*/
 
-      while (controller1.getRightTriggerAxis() >= 0.8) // RIGHT TRIGGER // 1
+    if (controller1.getRightBumper()) // RIGHT BUMPER // 1
     {
       arm.increaseTargetAngle();
       //BananaArm.testMotorsUp();
     }
-     
-      while (controller1.getLeftTriggerAxis() >= 0.8) // LEFT TRIGGER // 1
+
+    if (controller1.getLeftBumper()) // LEFT BUMPER // 1
     {
       arm.decreaseTargetAngle();
       //BananaArm.testMotorsDown();
     }
-    
-   
-
     
        /*-----------------------------------------------------------------------
        *  Out of Deadband - Manual Control
@@ -334,44 +364,23 @@ public class Robot extends TimedRobot
       } 
     }
     */
-
-       /*-----------------------------------------------------------------------
-       *  Intake(Claw) - Manual Control
-       *----------------------------------------------------------------------*/
       
-    if (controller1.getRightBumper()) // RIGHT BUMPER // 1
-    {
-      BananaClaw.changeClawState();
-
-      if(BananaClaw.intakeOpen == false)
-      {
-        BananaClaw.closeClaw(0.2);
-      }
-        else if(BananaClaw.intakeOpen == true)
-        {
-          BananaClaw.openClaw(0.2);
-        }
-    }
-      
-     /*--------------------------------------------------------------------------
-    *  Drive Controller - Presets
+    /*--------------------------------------------------------------------------
+    *  Brake Movement - Presets (1)
     *-------------------------------------------------------------------------*/
      
-     
-    if(controller1.getLeftBumper()) // LEFT BUMPER // 1
+    if(controller1.getBButton()) // B Button // 1
     {
       BananaBrake.changeBrakeState();
 
-        if(BananaBrake.brakeOn == true)//may have to change to a while loop
-        {
-          BananaBrake.Brake(0.2);
-        }
+      if(BananaBrake.brakeOn == true)
+      {
+        BananaBrake.Brake(0.2);
+      }
     }
         
-        
     /*--------------------------------------------------------------------------
-    *  Aux Controller - Pick Up Position Presets
-                        Preset Arm Positions
+    *  Aux Controller - Preset Arm Positions (2)
     *-------------------------------------------------------------------------*/
      
     if(controller2.getStartButton()) // START BUTTON // 2
@@ -389,11 +398,8 @@ public class Robot extends TimedRobot
       BananaPreSets.cargoPickUp();
     }
 
-    
-
-     /*--------------------------------------------------------------------------
-    *  Aux Controller - Scoring Position Presets
-    *                   Preset Arm Positions
+    /*--------------------------------------------------------------------------
+    *  Aux Controller - Preset Scoring Positions (2)
     *-------------------------------------------------------------------------*/
      
     if(controller2.getBButton())
@@ -410,17 +416,14 @@ public class Robot extends TimedRobot
     {
       BananaPreSets.lvl1RocketBall(); // X BUTTON // 2
     }
-    
-    
-      
-    
-    
-  }
+
+  } //End of robot controlls
+
 
 
   private void initializeRobotPositions()
   {
-      arm.setPivotTargetAngle(arm.getPivotAngle());
+    arm.setPivotTargetAngle(arm.getPivotAngle());
 
   }
 

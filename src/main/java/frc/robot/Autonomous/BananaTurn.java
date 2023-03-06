@@ -105,26 +105,38 @@ public class BananaTurn {
 			// calculates proportional term
 			currentError = targetAngle - currentAngle;
 
-			if (Math.abs(currentError) < PID_TURN_THRESHOLD) {
+			if (Math.abs(currentError) < PID_TURN_THRESHOLD) //if within half a degree, plus or minus
+            {
 				done = true;
-			} else {
-				if (functionTimer.get() > timeoutSeconds) {
+			} 
+            else 
+            {
+				if (functionTimer.get() > timeoutSeconds) 
+                {
 					done = true;
-				} else {
+				} 
+                else 
+                {
 					
 					deltaError = currentError - previousError;
 
-					if (firstTime == false) {
+					if (firstTime == false) 
+                    {
 
 						
-						if ((deltaError == 0.0) && (Math.abs(currentError) > 3.0)) {
+						if ((deltaError == 0.0) && (Math.abs(currentError) > 3.0)) 
+                        {
 							derivative = previousDerivative;
-						} else {
+						} 
+                        else 
+                        {
 
-							if (Math.abs(deltaError) > PID_TURN_DELTAERROR_THRESHOLD_HI) {
+							if (Math.abs(deltaError) > PID_TURN_DELTAERROR_THRESHOLD_HI) 
+                            {
 								derivative = previousDerivative;
-
-							} else {
+							} 
+                            else 
+                            {
 
 								/**********************************************************
 								 * We have a good deltaError value. Filter the derivative value to smooth out
@@ -135,7 +147,9 @@ public class BananaTurn {
 										+ ((1 - PID_TURN_FILTER_CONSTANT) * (deltaError / deltaT));
 							}
 						}
-					} else {
+					} 
+                    else 
+                    {
 						firstTime = false;
 						derivative = 0;
 					}

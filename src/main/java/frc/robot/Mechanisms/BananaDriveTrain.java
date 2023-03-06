@@ -36,14 +36,17 @@ public class BananaDriveTrain {
 
     private static DifferentialDrive drivebase;
 
-    public double left_command = 0;
-    public double right_command = 0;
+    public double cone_left_command = 0;
+    public double cone_right_command = 0;
+
+    public double cube_left_command = 0;
+    public double cube_right_command = 0;
     
     //private final double SPARKMAX_INTEGRATED_ENC_CNTS_PER_REV      = 2048.0;
     //private final double DRVTRAIN_WHEEL_RADIUS                    = 2;
     //private final double DRVTRAIN_WHEEL_CIRCUMFERENCE             = (2.0 * Math.PI * DRVTRAIN_WHEEL_RADIUS);
 
-    public boolean aimPIDState = false;
+    public static boolean aimPIDState = false;
 
     public  double         currentEncCountsToInches = 0.0;
  
@@ -132,7 +135,7 @@ public class BananaDriveTrain {
     
     public void tankDrive(double L, double R){
 
-        drivebase.tankDrive(-L*0.3, -R*0.3);  //set to half speed for now, may change for competition
+        drivebase.tankDrive(-L*0.3, -R*0.3);  //set to third speed for now, MUST change for competition
 
     }
 
@@ -162,12 +165,7 @@ public class BananaDriveTrain {
   
       while (true)
       {
-        if(aimPIDState==false || validTarget == 0.0)
-        {
-            break;
-        }
-
-            else if(aimPIDState==true && validTarget == 1.0)
+        if(aimPIDState==true && validTarget == 1.0)
             {
 
          
@@ -185,22 +183,23 @@ public class BananaDriveTrain {
                           steering_adjust = kAimP*cone_heading_error - min_command;
                   }
                 }
-            left_command += steering_adjust;
-            right_command -= steering_adjust;
+            cone_left_command += steering_adjust;
+            cone_right_command -= steering_adjust;
 
-                //Stop motors if target hit within close accuracy
-            if (Math.abs(cone_heading_error) < 1.0)
-            {
-            left_command = 0;
-            right_command = 0;
-            drivebase.tankDrive(0, 0);
-            }
-
-            aimBot(left_command, right_command);
+            aimBot(cone_left_command, cone_right_command);
         
             }   
-      }
-
+            else
+            {
+                break;
+            }
+    
+          }
+    
+          cone_left_command = 0; 
+          cone_right_command = 0; //Stop motors if target hit within close accuracy (15 pixels)
+    
+          aimBot(cone_left_command, cone_right_command);
       
     });
         coneThread.start();
@@ -232,12 +231,7 @@ public class BananaDriveTrain {
                                                     //MAY HAVE TO REVISE HOW TO DISTINGUISH CONE V. CUBE
                                                     //AIM PIDS
       {
-        if(aimPIDState==false || validTarget==1.0)
-        {
-            break;
-        }
-
-            else if(aimPIDState==true && validTarget == 0.0)
+        if(aimPIDState==true && validTarget == 0.0) //(limelight isn't focusing on a target)
             {
 
             //Trying to make the heading error 0 relative to the center of the usb camera display
@@ -255,20 +249,23 @@ public class BananaDriveTrain {
                     steering_adjust = kAimP*cube_heading_error - min_command;
                   }
             }
-        left_command += steering_adjust;
-        right_command -= steering_adjust;
+        cube_left_command += steering_adjust;
+        cube_right_command -= steering_adjust;
 
-        //Stop motors if target hit within close accuracy (10 pixels)
-        if (Math.abs(cube_heading_error) < 15.0){
-            left_command = 0;
-            right_command = 0;
+
+        aimBot(cube_left_command, cube_right_command);
         }
-
-        aimBot(left_command, right_command);
-
+        else
+        {
+            break;
         }
 
       }
+
+      cube_left_command = 0; 
+      cube_right_command = 0; //Stop motors if target hit within close accuracy (15 pixels)
+
+      aimBot(cube_left_command, cube_right_command);
 
       
     });

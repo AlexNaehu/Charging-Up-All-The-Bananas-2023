@@ -18,10 +18,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 public class BananaClaw {
     
     private static WPI_VictorSPX leftFinger;
-    private static WPI_VictorSPX rightFinger;
 
-    private int leftFinger_ID = 24;
-    private int rightFinger_ID = 25;
+    private int leftFinger_ID = 25;
+    private int rightFinger_ID = 29;
 
     public static boolean intakeOpen = true;
 
@@ -29,7 +28,6 @@ public class BananaClaw {
     {
 
         leftFinger = new WPI_VictorSPX(leftFinger_ID);
-        rightFinger = new WPI_VictorSPX(rightFinger_ID);
 
     }
 
@@ -40,13 +38,11 @@ public class BananaClaw {
     public static void closeClaw(double power)
     {
         leftFinger.set(-power);
-        rightFinger.set(power);
     }
 
     public static void openClaw(double power)
     {
         leftFinger.set(power);
-        rightFinger.set(-power);
     }
 
     public boolean isIntakeOpen()
@@ -57,11 +53,6 @@ public class BananaClaw {
     public double getLeftFingerPower()
     {
         return leftFinger.get();
-    }
-
-    public double getRightFingerPower()
-    {
-        return rightFinger.get();
     }
     
 
