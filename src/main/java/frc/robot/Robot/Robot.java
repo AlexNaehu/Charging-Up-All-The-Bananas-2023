@@ -277,14 +277,15 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() 
   {
     
-    driveTrain.tankDrive(controller1.getLeftY(), controller1.getRightY());
+    driveTrain.tankDrive(controller1.getLeftY(), controller1.getRightY()); // LEFT + RIGHT STICKS // 1
 
 
     /*--------------------------------------------------------------------------
     *  DriveBase shifter
     *-------------------------------------------------------------------------*/
 
-    if(controller1.getAButton()){
+    if(controller1.getAButton()) // A BUTTON // 1
+    {
       driveTrain.aimPIDState = !(driveTrain.aimPIDState);
     }
  
@@ -293,13 +294,13 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
 
 
-      while (controller1.getRightTriggerAxis() >= 0.8)
+      while (controller1.getRightTriggerAxis() >= 0.8) // RIGHT TRIGGER // 1
     {
       arm.increaseTargetAngle();
       //BananaArm.testMotorsUp();
     }
      
-      while (controller1.getLeftTriggerAxis() >= 0.8)
+      while (controller1.getLeftTriggerAxis() >= 0.8) // LEFT TRIGGER // 1
     {
       arm.decreaseTargetAngle();
       //BananaArm.testMotorsDown();
@@ -338,7 +339,7 @@ public class Robot extends TimedRobot
        *  Intake(Claw) - Manual Control
        *----------------------------------------------------------------------*/
       
-    if (controller1.getRightBumper()) // RIGHT BUMPER
+    if (controller1.getRightBumper()) // RIGHT BUMPER // 1
     {
       BananaClaw.changeClawState();
 
@@ -357,7 +358,7 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
      
      
-    if(controller1.getLeftBumper()) // LEFT BUMPER
+    if(controller1.getLeftBumper()) // LEFT BUMPER // 1
     {
       BananaBrake.changeBrakeState();
 
@@ -373,17 +374,17 @@ public class Robot extends TimedRobot
                         Preset Arm Positions
     *-------------------------------------------------------------------------*/
      
-    if(controller1.getStartButton()) // START BUTTON // 2
+    if(controller2.getStartButton()) // START BUTTON // 2
     {
       BananaPreSets.neutralPivotAngle();
     }
 
-    if(controller1.getBackButton()) // BACK BUTTON // 2
+    if(controller2.getBackButton()) // BACK BUTTON // 2
     {
       BananaPreSets.hatchPickUp();
     }
 
-    if(controller1.getAButton()) // A BUTTON // 2
+    if(controller2.getAButton()) // A BUTTON // 2
     {
       BananaPreSets.cargoPickUp();
     }
@@ -395,17 +396,17 @@ public class Robot extends TimedRobot
     *                   Preset Arm Positions
     *-------------------------------------------------------------------------*/
      
-    if(controller1.getBButton())
+    if(controller2.getBButton())
     {
       BananaPreSets.lvl3RocketBall(); // B BUTTON // 2
     }
 
-    if(controller1.getYButton())
+    if(controller2.getYButton())
     {
       BananaPreSets.lvl2RocketBall(); // Y BUTTON // 2
     }
 
-    if(controller1.getXButton())
+    if(controller2.getXButton())
     {
       BananaPreSets.lvl1RocketBall(); // X BUTTON // 2
     }
