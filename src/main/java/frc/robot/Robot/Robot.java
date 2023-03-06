@@ -316,7 +316,7 @@ public class Robot extends TimedRobot
     }
     else if (controller1.getLeftTriggerAxis() > 0.05 && controller1.getRightTriggerAxis() < 0.05)
     {
-      BananaClaw.openClaw(controller1.getLeftTriggerAxis()); // LEFT TRIGGER // 1
+      BananaClaw.openClaw(controller1.getLeftTriggerAxis()*0.5); // LEFT TRIGGER // 1
     }
     else
     {
