@@ -20,7 +20,7 @@ public class BananaClaw {
     private static WPI_VictorSPX leftFinger;
 
     private int leftFinger_ID = 25;
-    private int rightFinger_ID = 29;
+    //private int rightFinger_ID = 29;
 
     public static boolean intakeOpen = true;
 

@@ -5,7 +5,17 @@ import frc.robot.Robot.BananaPreSets;
 import frc.robot.Robot.Robot;
 
 public class BananaAutonPaths {
+
+
+
+
+
     
+
+
+
+
+
     private final static double leftHalfTurn = 90.0; //"left turn" means the front right corner whips around CCW
     private final static double leftFullTurn = 180;
     private final static double rightHalfTurn = -90.0; //"right turn" means the front left corner whips around CW
@@ -24,6 +34,16 @@ public class BananaAutonPaths {
 
 
     /*IMPORTANT: FIGURE OUT HOW TO PRELOAD OBJECTS INTO THE CLAW*/
+    /*Also Important: Consider using a timer to seperate each command by 0.2 seconds so that error doesn't stack */
+
+
+
+
+
+   
+
+
+
 
 
 
@@ -81,5 +101,5 @@ public class BananaAutonPaths {
         BananaDriveStraight.driveStraight(straightForwardMid);
         BananaDriveStraight.driveStraight(tipToeForward);
 
-    }
+    } 
 }

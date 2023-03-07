@@ -10,7 +10,19 @@ public class BananaTurn {
     /***************************************************************************
 	 * PID Turn Constants
 	 ***************************************************************************/
-    static private double PID_TURN_THRESHOLD   = 0.5;
+
+
+
+
+
+
+
+   static private double PID_TURN_THRESHOLD   = 0.5;
+
+
+
+
+
 
 	/***************************************************************************
 	 * PID_TURN_DELTAERROR_THRESHOLD_HI - Delta Error Values larger than this are
@@ -19,6 +31,17 @@ public class BananaTurn {
 	 * to see if deltaError is below this threshold before setting power at
 	 * PID_TURN_MIN_xxx_POWER.
 	 ***************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
 	final static private double PID_TURN_DELTAERROR_THRESHOLD_HI = 4.0;
 	final private static double PID_TURN_DELTAERROR_THRESHOLD_LO = 0.11;
 
@@ -40,6 +63,15 @@ public class BananaTurn {
 	/***************************************************************************
 	 * PID Turn Variables
 	 ***************************************************************************/
+
+
+
+   
+
+
+
+
+
 	private static Timer functionTimer;
 	private static Timer pdTimer;
 
@@ -63,7 +95,13 @@ public class BananaTurn {
 	private static double loopDelay = 0.015;
 
 	private static double previousDerivative = 0;
+
+
     
+
+
+
+
 
     public static void turnPID(double degreesToTurn, double timeoutSeconds){
 
@@ -142,7 +180,19 @@ public class BananaTurn {
 								 * We have a good deltaError value. Filter the derivative value to smooth out
 								 * jumps in derivative value
 								 **********************************************************/
-                                
+
+
+
+
+
+
+                         
+                    
+                    
+
+
+
+
 								derivative = PID_TURN_FILTER_CONSTANT * previousDerivative
 										+ ((1 - PID_TURN_FILTER_CONSTANT) * (deltaError / deltaT));
 							}
@@ -176,12 +226,33 @@ public class BananaTurn {
 					 * PID_TURN_DELTAERROR_THRESHOLD_LO, then we will set power to
 					 * PID_TURN_MIN_xxx_POWER.
 					 **********************************************************************/
-					if (power >= 0.0) {
+
+
+
+
+
+                    
+
+
+
+
+
+
+
+					if (power >= 0.0) 
+                    {
 						if (power < PID_TURN_MIN_POS_POWER && Math.abs(deltaError) < PID_TURN_DELTAERROR_THRESHOLD_LO)
-							power = PID_TURN_MIN_POS_POWER;
-					} else if (power < 0.0) {
+							{
+                                power = PID_TURN_MIN_POS_POWER;
+                            }
+                        Robot.driveTrain.tankDrive(0, power); //check if CCW or CW corresponds with pos/ neg angles
+					} 
+                    else if (power < 0.0) {
 						if (power > PID_TURN_MIN_NEG_POWER && Math.abs(deltaError) < PID_TURN_DELTAERROR_THRESHOLD_LO)
-							power = PID_TURN_MIN_NEG_POWER;
+							{
+                                power = PID_TURN_MIN_NEG_POWER;
+                            }
+                        Robot.driveTrain.tankDrive(power, 0); //check if CCW or CW corresponds with pos/ neg angles
 					}
 
 					//Power will be positive if turning right and negative if turning left
@@ -247,6 +318,13 @@ public class BananaTurn {
             }
     
         }   //End of setPidValues()
+
+
+
+
+
+
+
 
 }
 
