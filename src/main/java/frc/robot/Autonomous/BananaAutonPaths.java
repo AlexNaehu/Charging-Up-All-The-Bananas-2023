@@ -48,8 +48,10 @@ public class BananaAutonPaths {
 
 
     public static void rightScoreMob() //turns left, away from the wall on the right side of the robot
-    {
-        //BananaClaw.closeClaw(0.2);
+    {   
+        BananaPreSets.cargoPickUp();
+        BananaDriveStraight.driveStraight(tipToeBackward);
+        BananaClaw.closeClaw(0.2);
         BananaPreSets.lvl3RocketBall();
         BananaDriveStraight.driveStraight(tipToeForward);
         //Robot.driveTrain.aimPIDState = true;

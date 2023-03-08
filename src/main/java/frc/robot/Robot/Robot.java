@@ -312,7 +312,7 @@ public class Robot extends TimedRobot
     /*--------------------------------------------------------------------------
     *  Claw Movement - Manual Control (1)
     *-------------------------------------------------------------------------*/
-    /* 
+    
     if(controller1.getLeftTriggerAxis()<0.05 && controller1.getRightTriggerAxis()>0.05)
     {
       BananaClaw.closeClaw(controller1.getRightTriggerAxis()); // RIGHT TRIGGER // 1
@@ -325,32 +325,48 @@ public class Robot extends TimedRobot
     {
       BananaClaw.closeClaw(0.0); //Stop Motor
     }
-    */
+    
     /*--------------------------------------------------------------------------
     *  Arm Movement - Manual Control (1)
     *-------------------------------------------------------------------------*/
 
     if (controller1.getRightBumperPressed()) // RIGHT BUMPER // 1
     {
-      //arm.increaseTargetAngle();
-      BananaArm.testMotorsUp();
+      arm.increaseTargetAngle();
+      //BananaArm.testMotorsUp();
     }
 
     if (controller1.getLeftBumperPressed()) // LEFT BUMPER // 1
     {
-      //arm.decreaseTargetAngle();
-      BananaArm.testMotorsDown();
+      arm.decreaseTargetAngle();
+      //BananaArm.testMotorsDown();
     }
     
-       /*-----------------------------------------------------------------------
-       *  Out of Deadband - Manual Control
-       *----------------------------------------------------------------------*/
+
+    /*--------------------------------------------------------------------------
+    *  Brake Movement - Presets (1)
+    *-------------------------------------------------------------------------*/
+     
+    if(controller1.getBButton()) // B Button // 1
+    {
+      BananaBrake.changeBrakeState();
+
+      if(BananaBrake.brakeOn == true)
+      {
+        BananaBrake.Brake(0.2);
+      }
+    }
+
+
+    /*-----------------------------------------------------------------------
+    *  Out of Deadband - Manual Control (2)
+    *----------------------------------------------------------------------*/
        
        
-     if (controller1.getRightTriggerAxis()>RIGHT_DEADBAND_THRESHOLD)
-      pThr = controller1.getRightTriggerAxis();
-    if (controller1.getLeftTriggerAxis()>LEFT_DEADBAND_THRESHOLD)
-      pThr = (controller1.getLeftTriggerAxis()*0.2);
+     if (controller2.getRightTriggerAxis()>RIGHT_DEADBAND_THRESHOLD)
+      pThr = controller2.getRightTriggerAxis();
+    if (controller2.getLeftTriggerAxis()>LEFT_DEADBAND_THRESHOLD)
+      pThr = (controller2.getLeftTriggerAxis()*0.2);
 
     if(Math.abs(pThr) > LEFT_DEADBAND_THRESHOLD)
     {
@@ -368,19 +384,7 @@ public class Robot extends TimedRobot
     }
     
       
-    /*--------------------------------------------------------------------------
-    *  Brake Movement - Presets (1)
-    *-------------------------------------------------------------------------*/
-     
-    if(controller1.getBButton()) // B Button // 1
-    {
-      BananaBrake.changeBrakeState();
-
-      if(BananaBrake.brakeOn == true)
-      {
-        BananaBrake.Brake(0.2);
-      }
-    }
+    
         
     /*--------------------------------------------------------------------------
     *  Aux Controller - Preset Arm Positions (2)

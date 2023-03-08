@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class BananaArm{
 
 private static WPI_VictorSPX leftAngler = new WPI_VictorSPX(28); //made both of these static
-private static WPI_VictorSPX rightAngler = new WPI_VictorSPX(29);
+private static WPI_VictorSPX rightAngler = new WPI_VictorSPX(24); //check this motor's CAN ID
 
 
 
@@ -47,8 +47,8 @@ private static WPI_VictorSPX rightAngler = new WPI_VictorSPX(29);
 private static volatile double targetAngle;
 
 
-private static final double ARM_PIVOT_MAX_ANGLE = 310.0;   //Robot 0 deg = Arm pointing straight down
-private static final double ARM_PIVOT_MIN_ANGLE = 230.0;     //TBD, the reason for 110 range is to give wiggle
+private static final double ARM_PIVOT_MAX_ANGLE = 165.0;   //Robot 0 deg = Arm pointing straight down
+private static final double ARM_PIVOT_MIN_ANGLE = 75.0;     //TBD, the reason for 110 range is to give wiggle
                                                             // room for oscillations
 
 private static double PIVOT_VOLTAGE_OFFSET = 0.0;//may change if the motors require higher voltage.
@@ -110,12 +110,12 @@ public BananaArm(){
 
     public void increaseTargetAngle()
     {
-        targetAngle+=5.0;
+        targetAngle+=7.5;
     }
 
     public void decreaseTargetAngle()
     {
-        targetAngle-=5.0;
+        targetAngle-=7.5;
     }
 
     public void setArmTargetHit(boolean state)
@@ -142,8 +142,8 @@ public BananaArm(){
         Thread t = new Thread(() ->
         {
             final double ARM_PIVOT_THREAD_WAITING_TIME = 0.005;
-            final double kP = 0.00;//0.020 //0.013; //TODO
-            final double kD = 0.0000;//0.00020
+            final double kP = 0.013;//0.020 //0.013; //TODO
+            final double kD = 0.0002;//0.00020
             final double kI = 0.0;
             final double kA = 0.0077;//0.0077;
             final double kF = 0.0;//-0.05;
@@ -153,6 +153,7 @@ public BananaArm(){
             double kIpower;
             double kDpower;
             double kApower;
+            double kFpower;
 
             Timer armTimer = new Timer();
             armTimer.start();
@@ -161,9 +162,10 @@ public BananaArm(){
             double currentError; 
             double deltaError = 0; 
 
-            double previousDerivative;
-            double currentDerivative;    // in case you want to filter derivative
-            double filteredDerivative;
+            double previousDerivative = 0;
+            double currentDerivative;    
+            double filteredDerivative;  // filtered to prevent derivative jumps, and provide 
+                                        //a smoother transition to a new slope of the dE v. dt graph
             
             double previousTime = 0;
             
@@ -209,19 +211,21 @@ public BananaArm(){
                         integral += deltaTime * currentError;
 
                         currentDerivative = (deltaError / deltaTime);
-                        //filteredDerivative = (0.7 * currentDerivative) + (0.3 * previousDerivative);
+                        filteredDerivative = (0.7 * currentDerivative) + (0.3 * previousDerivative);
 
 
                         kPpower = kP * currentError;
                         kIpower = kI * integral;
-                        kDpower = kD * currentDerivative;
-                        kApower = (kA * (Math.cos(Math.toRadians(currentAngle - 324.5))));
+                        kDpower = kD * filteredDerivative;//currentDerivative;//filteredDerivative
+                        kApower = (kA * (Math.cos(Math.toRadians(currentAngle - 153.5))));
+                        kFpower = kF;
 
-                        power = kPpower + kIpower + kDpower + kApower;
+                        power = kPpower + kIpower + kDpower + kApower + kFpower;
                         //power = (kP * currentError) + (kA * (Math.cos(Math.toRadians(currentAngle - 324.5))));//ka compensates for angle of arm
                                 //arm extension distance + 13 is the distance from pivot to wrist
                                 //(kD * currentDerivative) + kF; //+ (kI * integral)
 
+                        
                         pivotArm(-power);
                         //armPivotMtrCtrlRT.set(power);
                     
@@ -244,8 +248,26 @@ public BananaArm(){
         t.start();
     }
 
-    public void pivotArm2(double power)
+    /*public void pivotArm2(double power)
     {
+
+        double pivotAngle = this.getPivotAngle();
+
+        if(Math.abs(power) <= INPUT_THRESHOLD)
+            {
+                setPivotTargetAngle(pivotAngle);
+                power = 0;
+            }
+            
+        if (power > 1)
+        {
+            power = 1;
+        }
+        if (power < -1)
+        {
+            power = -1;
+        }
+
         if(Math.abs(power) >= INPUT_THRESHOLD)
             {      
                 leftAngler.set(-power);
@@ -258,8 +280,19 @@ public BananaArm(){
             }  
     }
 
+    */
     public void pivotArm(double power){
         //using limits
+
+        if (power > 1)
+        {
+            power = 1;
+        }
+        if (power < -1)
+        {
+            power = -1;
+        }
+
         double pivotAngle = this.getPivotAngle();
 
         if(Math.abs(power) <= INPUT_THRESHOLD)
