@@ -67,7 +67,7 @@ public static boolean up = false;
 public static boolean down = false;
 private static double command = 0.0;
 
-private static final double INPUT_THRESHOLD = 1.0E-2;
+private static final double INPUT_THRESHOLD = 1.0E-3;
 
 public BananaArm(){
 
@@ -110,12 +110,12 @@ public BananaArm(){
 
     public void increaseTargetAngle()
     {
-        targetAngle+=7.5;
+        targetAngle+=5;
     }
 
     public void decreaseTargetAngle()
     {
-        targetAngle-=7.5;
+        targetAngle-=5;
     }
 
     public void setArmTargetHit(boolean state)
@@ -142,11 +142,11 @@ public BananaArm(){
         Thread t = new Thread(() ->
         {
             final double ARM_PIVOT_THREAD_WAITING_TIME = 0.005;
-            final double kP = 0.013;//0.020 //0.013; //TODO
-            final double kD = 0.0002;//0.00020
+            final double kP = 0.020;//0.020 //0.013; //TODO
+            final double kD = 0.00;//0.00020
             final double kI = 0.0;
             final double kA = 0.0077;//0.0077;
-            final double kF = 0.0;//-0.05;
+            final double kF = -0.01;//-0.05;
 
             double power;            
             double kPpower;
@@ -211,13 +211,13 @@ public BananaArm(){
                         integral += deltaTime * currentError;
 
                         currentDerivative = (deltaError / deltaTime);
-                        filteredDerivative = (0.7 * currentDerivative) + (0.3 * previousDerivative);
+                        //filteredDerivative = (0.7 * currentDerivative) + (0.3 * previousDerivative);
 
 
                         kPpower = kP * currentError;
                         kIpower = kI * integral;
-                        kDpower = kD * filteredDerivative;//currentDerivative;//filteredDerivative
-                        kApower = (kA * (Math.cos(Math.toRadians(currentAngle - 153.5))));
+                        kDpower = kD * currentDerivative;//filteredDerivative;//currentDerivative;//filteredDerivative
+                        kApower = (kA * (Math.cos(Math.toRadians(153.5 - currentAngle))));
                         kFpower = kF;
 
                         power = kPpower + kIpower + kDpower + kApower + kFpower;
@@ -238,6 +238,7 @@ public BananaArm(){
                         SmartDashboard.putNumber("I Power", kIpower);
                         SmartDashboard.putNumber("D Power", kDpower);
                         SmartDashboard.putNumber("A Power", kApower);
+                        SmartDashboard.putNumber("F Power", kFpower);
                         SmartDashboard.putNumber("Total Arm Power", power);
                     
                         Timer.delay(ARM_PIVOT_THREAD_WAITING_TIME);
@@ -303,10 +304,11 @@ public BananaArm(){
             {
                 //setPivotTargetAngle(BananaConstants.INVALID_ANGLE);
 
-                if (pivotAngle >= ARM_PIVOT_MAX_ANGLE || Math.abs(power) > 1.0)
+                if (pivotAngle > ARM_PIVOT_MAX_ANGLE || Math.abs(power) > 1.0)
                 {
                     leftAngler.set(0.0);
                     rightAngler.set(0.0);
+                    setPivotTargetAngle(ARM_PIVOT_MAX_ANGLE); //CHANGED HERE
                 }
                     else if (Math.abs(power) > INPUT_THRESHOLD)
                     {
@@ -318,10 +320,11 @@ public BananaArm(){
             {
                 //setPivotTargetAngle(BananaConstants.INVALID_ANGLE);
 
-                if (pivotAngle <= ARM_PIVOT_MIN_ANGLE || Math.abs(power) > 1.0)
+                if (pivotAngle < ARM_PIVOT_MIN_ANGLE || Math.abs(power) > 1.0)
                 {
                     leftAngler.set(0.0);
                     rightAngler.set(0.0);
+                    setPivotTargetAngle(ARM_PIVOT_MIN_ANGLE);
                 }
                     else if ( Math.abs(power) > INPUT_THRESHOLD)
                     {

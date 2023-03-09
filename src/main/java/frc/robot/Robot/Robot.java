@@ -59,6 +59,10 @@ public class Robot extends TimedRobot
 
   private boolean armPIDState = false;
 
+  private boolean gear1 = false;//0.3 Power
+  private boolean gear2 = true;//0.5 Power
+  private boolean gear3 = false;//0.8 Power
+
   public static AHRS navx;
   
   public static XboxController controller1;
@@ -74,6 +78,8 @@ public class Robot extends TimedRobot
   
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  public static Timer autonClock;
 
   //private DifferentialDriveOdometry odometry;
 
@@ -129,11 +135,13 @@ public class Robot extends TimedRobot
 
     //driveTrain.coneAimPID();
     //driveTrain.cubeAimPID();
-    sensor.sensorObject();
+    //sensor.sensorObject();
 
 
     var timer = new Timer();
     timer.start();
+
+    autonClock = new Timer();
     
   }
 
@@ -247,12 +255,19 @@ public class Robot extends TimedRobot
 
     initializeRobotPositions();
 
+    autonClock.reset();
+    autonClock.start();
+
   }
 
   @Override
-  public void autonomousPeriodic()
+  public void autonomousPeriodic() //periodically calls one of three battle plans >:D
   {
     
+    //Moved to autonomousInit();
+    //autonClock.reset();
+    //autonClock.start();
+
     switch (m_autoSelected) {
 
       case RightScoreMob:
@@ -271,6 +286,7 @@ public class Robot extends TimedRobot
         // Put default auto code here
         break;
     }
+    autonClock.stop();
 
     
   }
@@ -297,14 +313,54 @@ public class Robot extends TimedRobot
     /*--------------------------------------------------------------------------
     *  DriveBase Movement - Manual Control (1)
     *-------------------------------------------------------------------------*/
+    
+    if (controller1.getAButtonPressed()) //0.3 Speed
+    {
+    gear1 = true;
+    gear2 = false;
+    gear3 = false;
+    }
 
-    driveTrain.tankDrive(controller1.getLeftY(), controller1.getRightY()); // LEFT + RIGHT STICKS // 1
+    if (controller1.getXButtonPressed()) //0.5 Speed
+    {
+      
+    gear1 = false;
+    gear2 = true;
+    gear3 = false;
+    }
+
+    if (controller1.getYButtonPressed()) //0.7 Speed
+    {
+      gear1 = false;
+      gear2 = false;
+      gear3 = true;
+    }
+
+
+    if (gear1)
+    {
+    driveTrain.tankDriveLow(controller1.getLeftY(), controller1.getRightY()); // LEFT + RIGHT STICKS // 1
+    }
+
+    if (gear2)
+    {
+    driveTrain.tankDriveMid(controller1.getLeftY(), controller1.getRightY()); // LEFT + RIGHT STICKS // 1
+    }
+
+    if(gear3)
+    {
+    driveTrain.tankDriveHigh(controller1.getLeftY(), controller1.getRightY()); // LEFT + RIGHT STICKS // 1
+    }
+
+    //3 Levels of SPEEEED
+
+
 
     /*--------------------------------------------------------------------------
     *  DriveBase Movement - AimBot (1)
     *-------------------------------------------------------------------------*/
     
-    if(controller1.getAButton()) // A BUTTON // 1
+    if(controller1.getStartButtonPressed()) // A BUTTON // 1
     {
       BananaDriveTrain.aimPIDState = !(BananaDriveTrain.aimPIDState);
     }
@@ -330,7 +386,7 @@ public class Robot extends TimedRobot
     *  Arm Movement - Manual Control (1)
     *-------------------------------------------------------------------------*/
 
-    if (controller1.getRightBumperPressed()) // RIGHT BUMPER // 1
+    if (controller1.getRightBumperPressed()) // RIGHT BUMPER // 1 // Maybe do getRightBumper()
     {
       arm.increaseTargetAngle();
       //BananaArm.testMotorsUp();

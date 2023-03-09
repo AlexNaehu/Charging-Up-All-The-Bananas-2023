@@ -36,7 +36,7 @@ public class BananaPreSets
     
     //Values for scoring cargo in different levels (RECALCULATE THE ANGLES BASED ON GAME SPECS)
      
-    private static double LVL_3_BALL_PIVOT_ANGLE = 145.0; //Top step in the scoring grids
+    private static double LVL_3_BALL_PIVOT_ANGLE = 150.0; //Top step in the scoring grids
     
 
     private static double LVL_2_BALL_PIVOT_ANGLE = 130.0; //Middle step in the scoring grids

@@ -132,10 +132,29 @@ public class BananaDriveTrain {
         Rdrive2.setIdleMode(IdleMode.kCoast);
     }
 
+    //might have to make another tankDrive method for auto aim, test to see if 0.8 causes overshoot
     
     public void tankDrive(double L, double R){
+        setToBrakeMode();
+        drivebase.tankDrive(-L, -R);  //100% for now, used for auton/ auto aim (L and R inputs are < 1)
 
-        drivebase.tankDrive(-L*0.3, -R*0.3);  //set to third speed for now, MUST change for competition
+    }
+
+    public void tankDriveLow(double L, double R){
+        setToBrakeMode();
+        drivebase.tankDrive(-L*0.3, -R*0.3);
+
+    }
+
+    public void tankDriveMid(double L, double R){
+        setToBrakeMode();
+        drivebase.tankDrive(-L*0.5, -R*0.5);
+
+    }
+
+    public void tankDriveHigh(double L, double R){
+        setToCoastMode();
+        drivebase.tankDrive(-L*0.8, -R*0.8);
 
     }
 

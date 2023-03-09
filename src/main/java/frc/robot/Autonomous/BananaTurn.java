@@ -50,7 +50,7 @@ public class BananaTurn {
 
 	final static private double PID_TURN_KP = 0.08;
     final static private double PID_TURN_KI = 0.0;
-    final static private double PID_TURN_KD = 0.012; // 0.0744
+    final static private double PID_TURN_KD = 0.0;
 
 	final static private double TURN_MAX_POWER =  1.0;
 	final static private double TURN_MIN_POWER = -1.0;
@@ -245,14 +245,15 @@ public class BananaTurn {
 							{
                                 power = PID_TURN_MIN_POS_POWER;
                             }
-                        Robot.driveTrain.tankDrive(0, power); //check if CCW or CW corresponds with pos/ neg angles
+                        Robot.driveTrain.tankDrive(-power, 0); //check if CW or CCW corresponds with pos/ neg angles
 					} 
-                    else if (power < 0.0) {
+                    else if (power < 0.0) 
+					{
 						if (power > PID_TURN_MIN_NEG_POWER && Math.abs(deltaError) < PID_TURN_DELTAERROR_THRESHOLD_LO)
 							{
                                 power = PID_TURN_MIN_NEG_POWER;
                             }
-                        Robot.driveTrain.tankDrive(power, 0); //check if CCW or CW corresponds with pos/ neg angles
+                        Robot.driveTrain.tankDrive(0, -power); //check if CW or CCW corresponds with pos/ neg angles, respectively
 					}
 
 					//Power will be positive if turning right and negative if turning left
@@ -284,7 +285,7 @@ public class BananaTurn {
                 pidTurnkP = 0.090;
                 pidTurnkD = 0.024;
             }
-            if (degreesToTurnAbs <= 30.0) {
+            else if (degreesToTurnAbs <= 30.0) {
                 pidTurnkP = 0.110;   //0.126 at 12.0 V;
                 pidTurnkD = 0.026;
                 PID_TURN_THRESHOLD = 0.75;
