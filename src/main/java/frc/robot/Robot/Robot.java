@@ -134,14 +134,14 @@ public class Robot extends TimedRobot
     
 
     //driveTrain.coneAimPID();
-    //driveTrain.cubeAimPID();
-    //sensor.sensorObject();
+    //driveTrain.cubeAimPID(); //prolly not going to use this bc of USB load on roboRio CPU
+    //sensor.sensorObject(); //def cant use bc of image processing load on roboRio load
 
 
     var timer = new Timer();
     timer.start();
 
-    autonClock = new Timer();
+    autonClock = new Timer(); //starts in autonInit()
     
   }
 
@@ -403,7 +403,7 @@ public class Robot extends TimedRobot
     *  Brake Movement - Presets (1)
     *-------------------------------------------------------------------------*/
      
-    if(controller1.getBButton()) // B Button // 1
+    if(controller1.getBackButtonPressed()) // Back Button // 1
     {
       BananaBrake.changeBrakeState();
 
@@ -418,7 +418,7 @@ public class Robot extends TimedRobot
     *  Out of Deadband - Manual Control (2)
     *----------------------------------------------------------------------*/
        
-       
+       /* 
      if (controller2.getRightTriggerAxis()>RIGHT_DEADBAND_THRESHOLD)
       pThr = controller2.getRightTriggerAxis();
     if (controller2.getLeftTriggerAxis()>LEFT_DEADBAND_THRESHOLD)
@@ -439,7 +439,7 @@ public class Robot extends TimedRobot
       } 
     }
     
-      
+      */
     
         
     /*--------------------------------------------------------------------------

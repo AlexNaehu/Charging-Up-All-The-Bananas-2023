@@ -136,7 +136,7 @@ public class BananaDriveTrain {
     
     public void tankDrive(double L, double R){
         setToBrakeMode();
-        drivebase.tankDrive(-L, -R);  //100% for now, used for auton/ auto aim (L and R inputs are < 1)
+        drivebase.tankDrive(-L*0.3, -R*0.3);  //100% for now, used for auton/ auto aim (L and R inputs are < 1)
 
     }
 
