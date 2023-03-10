@@ -35,12 +35,12 @@ public class BananaClaw {
     {
         intakeOpen = !intakeOpen;
     }
-    public static void closeClaw(double power)
+    public static void closeClaw(double power) //takes 2 seconds to close around a cone from full open 
     {
         leftFinger.set(-power);
     }
 
-    public static void openClaw(double power)
+    public static void openClaw(double power) // takes 2 seconds to open from a cone closed position back to full open
     {
         leftFinger.set(power);
     }

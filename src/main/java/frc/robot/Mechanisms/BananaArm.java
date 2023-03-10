@@ -110,12 +110,12 @@ public BananaArm(){
 
     public void increaseTargetAngle()
     {
-        targetAngle+=7.5;
+        targetAngle+=15.0;
     }
 
     public void decreaseTargetAngle()
     {
-        targetAngle-=7.5;
+        targetAngle-=7.5; //smaller because gravity pulls the arm that is already trying to go down
     }
 
     public void setArmTargetHit(boolean state)
@@ -142,10 +142,10 @@ public BananaArm(){
         Thread t = new Thread(() ->
         {
             final double ARM_PIVOT_THREAD_WAITING_TIME = 0.005;
-            final double kP = 0.00;//0.020 //0.013; //TODO
+            final double kP = 0.013;//0.020 //0.013; //TODO
             final double kD = 0.00;//0.00020
             final double kI = 0.0;
-            final double kA = 0.01;//0.0077;
+            final double kA = 0.420;//0.0077;
             final double kF = -0.0;//-0.05;
 
             double power;            

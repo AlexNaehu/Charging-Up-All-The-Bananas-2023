@@ -23,10 +23,10 @@ public class BananaPreSets
 
     
    
-    private static double NEUTRAL_PIVOT_ANGLE = 90.0;// 0.0 angle is at straight verticle down, have a button for manual to return the arm to verticle, have auton
+    private static double NEUTRAL_PIVOT_ANGLE = 85.0;// 0.0 angle is at straight verticle down, have a button for manual to return the arm to verticle, have auton
                                                     // lower the arm to 0.0 before it drives to the charging station
     
-    private static double PICKUP_PIVOT_ANGLE = 105.0;//slightly higher than the neutral angle, trial and error to find a comfortable angle to grab the cone
+    private static double PICKUP_PIVOT_ANGLE = 95.0;//slightly higher than the neutral angle, trial and error to find a comfortable angle to grab the cone
     
 
     //Values for picking up objects in the double station shelf
@@ -39,7 +39,7 @@ public class BananaPreSets
     private static double LVL_3_BALL_PIVOT_ANGLE = 150.0; //Top step in the scoring grids
     
 
-    private static double LVL_2_BALL_PIVOT_ANGLE = 130.0; //Middle step in the scoring grids
+    private static double LVL_2_BALL_PIVOT_ANGLE = 140.0; //Middle step in the scoring grids
    
 
     private static double LVL_1_BALL_PIVOT_ANGLE = 115.0; //Doubles as the travel angle, rename to "travel angle"

@@ -154,7 +154,7 @@ public class BananaDriveTrain {
 
     public void tankDriveHigh(double L, double R){
         setToCoastMode();
-        drivebase.tankDrive(-L*0.8, -R*0.8);
+        drivebase.tankDrive(-L*0.7, -R*0.7);
 
     }
 
@@ -172,11 +172,11 @@ public class BananaDriveTrain {
     {
       float kAimP = -0.01f;  //may need to calibrate kAimP or min_command if aiming causes occilation
       float min_command = 0.0005f;
-  
+        //max power is -0.01(30)  or -0.01(-30)= -0.3 or 0.3
       float cone_heading_error;
       float steering_adjust;
       
-      float limeX = (float) SmartDashboard.getNumber("tx", 0.0f);
+      float limeX = (float) SmartDashboard.getNumber("tx", 0.0f); //display 60 pixels wide, so 0 plus/minus 30
       double validTarget = SmartDashboard.getNumber("tv", 0.0);  
 
       
@@ -197,28 +197,24 @@ public class BananaDriveTrain {
                   {
                           steering_adjust = kAimP*cone_heading_error + min_command;
                   }
-                  else
-                  {
-                          steering_adjust = kAimP*cone_heading_error - min_command;
-                  }
+                    else if (cone_heading_error > 0)
+                    {
+                        steering_adjust = kAimP*cone_heading_error - min_command;
+                    }
+                        
                 }
-            cone_left_command += steering_adjust;
-            cone_right_command -= steering_adjust;
+                
+                
+            cone_left_command = steering_adjust;
+            cone_right_command = -(steering_adjust);
 
             aimBot(cone_left_command, cone_right_command);
         
             }   
-            else
-            {
-                break;
-            }
     
           }
     
-          cone_left_command = 0; 
-          cone_right_command = 0; //Stop motors if target hit within close accuracy (15 pixels)
-    
-          aimBot(cone_left_command, cone_right_command);
+         
       
     });
         coneThread.start();
@@ -227,9 +223,9 @@ public class BananaDriveTrain {
 
     
     
-
+    
     public void cubeAimPID(){
-
+        /* 
         cubeThread = new Thread(() ->
     {
       float kAimP = -0.000005f;  //may need to calibrate kAimP or min_command if aiming causes occilation
@@ -280,6 +276,7 @@ public class BananaDriveTrain {
         }
 
       }
+      
 
       cube_left_command = 0; 
       cube_right_command = 0; //Stop motors if target hit within close accuracy (15 pixels)
@@ -289,11 +286,12 @@ public class BananaDriveTrain {
       
     });
         cubeThread.start();
-
+    */
     }
 
     public void aimBot(double left_command, double right_command)
     {
+        if (aimPIDState == true){
         if(Math.abs(left_command) < 0.03 && Math.abs(right_command) < 0.03)
         {
             drivebase.tankDrive(0, 0);
@@ -302,6 +300,7 @@ public class BananaDriveTrain {
             {
                 drivebase.tankDrive(left_command, right_command);
             }
+        }
     }
 
 

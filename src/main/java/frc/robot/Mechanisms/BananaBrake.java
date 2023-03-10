@@ -35,8 +35,8 @@ public class BananaBrake {
     }
     public static void Brake(double power) //can only turn brake on, not off
     {
-        leftBrake.set(-power);
-        rightBrake.set(power);
+        leftBrake.set(power);
+        rightBrake.set(-power);
     }
 
 

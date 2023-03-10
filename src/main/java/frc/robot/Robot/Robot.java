@@ -132,7 +132,7 @@ public class Robot extends TimedRobot
     
     arm.pivotPID();
     
-
+                                                                                                                                                                                                                                                                                                                                                                                       
     //driveTrain.coneAimPID();
     //driveTrain.cubeAimPID(); //prolly not going to use this bc of USB load on roboRio CPU
     //sensor.sensorObject(); //def cant use bc of image processing load on roboRio load
@@ -206,7 +206,7 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("PIVOT: Encoder Voltage", arm.armPivotEnc.getVoltage());
     SmartDashboard.putNumber("PIVOT: Encoder Angle", arm.getPivotAngle());
     SmartDashboard.putNumber("Right Arm Angler Temperature", arm.getArmTemp(24));
-    SmartDashboard.putNumber("Left Angler Temperature", arm.getArmTemp(28));
+    SmartDashboard.putNumber("Left Arm Angler Temperature", arm.getArmTemp(28));
     
 
     //Claw
@@ -216,7 +216,7 @@ public class Robot extends TimedRobot
     //Brake
     SmartDashboard.putBoolean("Brake: On State", brake.isBrakeOn());
     SmartDashboard.putNumber("Brake: Left Power", brake.getLeftBrakePower());
-    SmartDashboard.putNumber("Brake: Reft Power", brake.getRightBrakePower());
+    SmartDashboard.putNumber("Brake: Right Power", brake.getRightBrakePower());
 
 
 
@@ -270,19 +270,16 @@ public class Robot extends TimedRobot
 
     switch (m_autoSelected) {
 
-      case RightScoreMob:
-      BananaAutonPaths.rightScoreMob();
+      case LeftScoreMob:
+      //BananaAutonPaths.leftScoreMob();
         // Put custom auto code here
         break;
       case MidScorePark:
-      BananaAutonPaths.midScorePark();
+      //BananaAutonPaths.midScorePark();
         // Put custom auto code here
         break;
-      case LeftScoreMob:
-      BananaAutonPaths.leftScoreMob();
-        // Put custom auto code here
-      break;
-      default:
+      case RightScoreMob:
+        BananaAutonPaths.rightScoreMob();
         // Put default auto code here
         break;
     }
@@ -335,7 +332,7 @@ public class Robot extends TimedRobot
       gear2 = false;
       gear3 = true;
     }
-
+     
 
     if (gear1)
     {
@@ -351,9 +348,9 @@ public class Robot extends TimedRobot
     {
     driveTrain.tankDriveHigh(controller1.getLeftY(), controller1.getRightY()); // LEFT + RIGHT STICKS // 1
     }
-
+    
     //3 Levels of SPEEEED
-
+    
 
 
     /*--------------------------------------------------------------------------
@@ -375,7 +372,7 @@ public class Robot extends TimedRobot
     }
     else if (controller1.getLeftTriggerAxis() > 0.05 && controller1.getRightTriggerAxis() < 0.05)
     {
-      BananaClaw.openClaw(controller1.getLeftTriggerAxis()*0.5); // LEFT TRIGGER // 1
+      BananaClaw.openClaw(controller1.getLeftTriggerAxis()); // LEFT TRIGGER // 1
     }
     else
     {
@@ -403,15 +400,12 @@ public class Robot extends TimedRobot
     *  Brake Movement - Presets (1)
     *-------------------------------------------------------------------------*/
      
-    if(controller1.getBackButtonPressed()) // Back Button // 1
+    if(controller1.getBackButton()) // Back Button // 1
     {
-      BananaBrake.changeBrakeState();
-
-      if(BananaBrake.brakeOn == true)
-      {
-        BananaBrake.Brake(0.2);
-      }
+     BananaBrake.Brake(1);
     }
+    else      
+      BananaBrake.Brake(0);
 
 
     /*-----------------------------------------------------------------------
