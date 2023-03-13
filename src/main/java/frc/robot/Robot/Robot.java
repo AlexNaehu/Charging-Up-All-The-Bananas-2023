@@ -115,9 +115,9 @@ public class Robot extends TimedRobot
     /*--------------------------------------------------------------------------
     *  Initialize Auton
     *-------------------------------------------------------------------------*/
-    m_chooser.setDefaultOption("LeftScoreMob", LeftScoreMob);
+    m_chooser.setDefaultOption("RightScoreMob", RightScoreMob);
     m_chooser.addOption("MidScorePark", MidScorePark);
-    m_chooser.addOption("RightScoreMob", RightScoreMob);
+    m_chooser.addOption("LeftScoreMob", LeftScoreMob);
    
     SmartDashboard.putData("Auto choices", m_chooser);
 
@@ -283,7 +283,7 @@ public class Robot extends TimedRobot
         // Put default auto code here
         break;
     }
-    autonClock.stop();
+    
 
     
   }
@@ -291,6 +291,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopInit() 
   {
+    autonClock.stop();
     initializeRobotPositions();
 
   }
@@ -389,6 +390,21 @@ public class Robot extends TimedRobot
       //BananaArm.testMotorsUp();
     }
 
+    /*
+     * if(controller1.getRightBumper())
+    {
+      arm.increaseTargetAngle();
+    }
+    else if (controller1.getLeftBumper())
+    {
+      arm.decreaseTargetAngle();
+    }
+    else
+    {
+      BananaClaw.closeClaw(0.0); //Stop Motor
+    }
+     */
+
     if (controller1.getLeftBumperPressed()) // LEFT BUMPER // 1
     {
       arm.decreaseTargetAngle();
@@ -397,15 +413,15 @@ public class Robot extends TimedRobot
     
 
     /*--------------------------------------------------------------------------
-    *  Brake Movement - Presets (1)
+    *  Brake Movement - Presets (2)
     *-------------------------------------------------------------------------*/
      
     if(controller1.getBackButton()) // Back Button // 1
     {
-     BananaBrake.Brake(1);
+     //BananaBrake.Brake(1);
     }
     else      
-      BananaBrake.Brake(0);
+      //BananaBrake.Brake(0);
 
 
     /*-----------------------------------------------------------------------
@@ -445,7 +461,7 @@ public class Robot extends TimedRobot
       BananaPreSets.neutralPivotAngle();
     }
 
-    if(controller2.getBackButton()) // BACK BUTTON // 2
+    if(controller2.getRightBumper()) // BACK BUTTON // 2
     {
       BananaPreSets.hatchPickUp();
     }
@@ -459,20 +475,22 @@ public class Robot extends TimedRobot
     *  Aux Controller - Preset Scoring Positions (2)
     *-------------------------------------------------------------------------*/
      
-    if(controller2.getBButton())
+    if(controller2.getYButton())
     {
       BananaPreSets.lvl3RocketBall(); // B BUTTON // 2
     }
 
-    if(controller2.getYButton())
+    if(controller2.getXButton())
     {
       BananaPreSets.lvl2RocketBall(); // Y BUTTON // 2
     }
 
-    if(controller2.getXButton())
+    if(controller2.getBButton())
     {
-      BananaPreSets.lvl1RocketBall(); // X BUTTON // 2
+      BananaPreSets.lvl1RocketBall();
     }
+
+    
     
 
   } //End of robot controlls

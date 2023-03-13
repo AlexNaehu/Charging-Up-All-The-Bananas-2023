@@ -15,7 +15,7 @@ public class BananaDriveStraight {
     public static void driveStraight(int distance)
     {
 
-        Timer.delay(BananaConstants.NAVX_RESET_WAIT_TIME);
+        //Timer.delay(BananaConstants.NAVX_RESET_WAIT_TIME);
         
         clock.reset();
         clock.start();
@@ -23,52 +23,58 @@ public class BananaDriveStraight {
         switch (distance){
 
             case(0):    //straightForwardSide(0)
-                Robot.driveTrain.tankDrive(-0.5, -0.5);
-                if(clock.get() > 3)
-                {
-                    Robot.driveTrain.tankDrive(0,0);
-                }
+                Robot.driveTrain.tankDrive(-0.7, -0.7);
+                
             break;
 
             case(1):    //straightForwardMid(1)
-                Robot.driveTrain.tankDrive(-0.5, -0.5);
-                if(clock.get() > 2)
-                {
-                    Robot.driveTrain.tankDrive(0,0);
-                }
+                Robot.driveTrain.tankDriveMid(-1, -1);
+                
             break;
 
             case(2):    //tipToeForward(2)
-                Robot.driveTrain.tankDrive(-0.3, -0.3);
-                if(clock.get() > 1.0)
-                {
-                    Robot.driveTrain.tankDrive(0,0);
-                }
+                Robot.driveTrain.tankDriveLow(-1.3, -1.3);
+                
             break;
 
             case(3):    //straightBackwardSide(3)
-                Robot.driveTrain.tankDrive(0.5, 0.5);
-                if(clock.get() > 1)
-                {
-                    Robot.driveTrain.tankDrive(0,0);
-                }
+                Robot.driveTrain.tankDrive(0.7, 0.7);
+                
             break;
 
             case(4):    //straightBackwardMid(4)
-                Robot.driveTrain.tankDrive(0.45, 0.45);
-                if(clock.get() > 1)
-                {
-                    Robot.driveTrain.tankDrive(0,0);
-                }
+                Robot.driveTrain.tankDriveMid(1, 1);
+                
             break;
 
             case(5):    //tipToeBackward(5)
-                Robot.driveTrain.tankDrive(0.3, 0.3);
-                if(clock.get() > 1.0)
-                {
-                    Robot.driveTrain.tankDrive(0,0);
-                }
+                Robot.driveTrain.tankDriveLow(1.3, 1.3);
+                
             break;
+
+            case(6):    //rightTurn (6)
+                Robot.driveTrain.tankDriveLow(-1.5, 1.5);
+
+            break;
+
+            case(7):    //leftTurn (7)
+                Robot.driveTrain.tankDriveLow(1.5, -1.5);
+            
+            break;
+
+            case(8):    //hyperRightTurn (8)
+                Robot.driveTrain.tankDriveLow(-3, 3);
+
+            break;
+
+            case(9):    //hyperLeftTurn (9)
+                Robot.driveTrain.tankDriveLow(3, -3);
+
+            break;
+
+
+
+
                 
 
 

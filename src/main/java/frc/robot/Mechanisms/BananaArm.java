@@ -47,8 +47,8 @@ private static WPI_VictorSPX rightAngler = new WPI_VictorSPX(24); //check this m
 private static volatile double targetAngle;
 
 
-private static final double ARM_PIVOT_MAX_ANGLE = 165.0;   //Robot 0 deg = Arm pointing straight down
-private static final double ARM_PIVOT_MIN_ANGLE = 75.0;     //TBD, the reason for 110 range is to give wiggle
+private static final double ARM_PIVOT_MAX_ANGLE = 183.0;   //Robot 0 deg = Arm pointing straight down
+private static final double ARM_PIVOT_MIN_ANGLE = 77.0;     //TBD, the reason for 110 range is to give wiggle
                                                             // room for oscillations
 
 private static double PIVOT_VOLTAGE_OFFSET = 0.0;//may change if the motors require higher voltage.
@@ -110,12 +110,12 @@ public BananaArm(){
 
     public void increaseTargetAngle()
     {
-        targetAngle+=15.0;
+        targetAngle+=5;
     }
 
     public void decreaseTargetAngle()
     {
-        targetAngle-=7.5; //smaller because gravity pulls the arm that is already trying to go down
+        targetAngle-=5; //smaller because gravity pulls the arm that is already trying to go down
     }
 
     public void setArmTargetHit(boolean state)
@@ -142,11 +142,11 @@ public BananaArm(){
         Thread t = new Thread(() ->
         {
             final double ARM_PIVOT_THREAD_WAITING_TIME = 0.005;
-            final double kP = 0.013;//0.020 //0.013; //TODO
-            final double kD = 0.00;//0.00020
+            final double kP = 0.021;//0.020 //0.013; //TODO
+            final double kD = 0.0012;//0.00020
             final double kI = 0.0;
-            final double kA = 0.420;//0.0077;
-            final double kF = -0.0;//-0.05;
+            final double kA = 0.34;//0.38//0.0077;
+            final double kF = 0.0;//-0.05;
 
             double power;            
             double kPpower;
@@ -217,7 +217,7 @@ public BananaArm(){
                         kPpower = kP * currentError;
                         kIpower = kI * integral;
                         kDpower = kD * currentDerivative;//filteredDerivative;//currentDerivative;//filteredDerivative
-                        kApower = (kA * (Math.cos(Math.toRadians(153.5 - currentAngle))));
+                        kApower = (kA * (Math.cos(Math.toRadians(159.5 - currentAngle))));
                         kFpower = kF;
 
                         power = kPpower + kIpower + kDpower + kApower + kFpower;
@@ -285,20 +285,20 @@ public BananaArm(){
     public void pivotArm(double power){
         //using limits
 
-        if (power > 1)
+        if (power > 0.9)
         {
-            power = 1;
+            power = 0.9;
         }
-        if (power < -1)
+        if (power < -0.9)
         {
-            power = -1;
+            power = -0.9;
         }
 
         double pivotAngle = this.getPivotAngle();
 
         if(Math.abs(power) <= INPUT_THRESHOLD)
             {
-                setPivotTargetAngle(pivotAngle);
+                //setPivotTargetAngle(pivotAngle);
             }
             else if (power > 0.0)
             {
@@ -310,7 +310,7 @@ public BananaArm(){
                     rightAngler.set(0.0);
                     setPivotTargetAngle(ARM_PIVOT_MAX_ANGLE); //CHANGED HERE
                 }
-                    else if (Math.abs(power) > INPUT_THRESHOLD)
+                    else //if (Math.abs(power) > INPUT_THRESHOLD)
                     {
                         leftAngler.set(power);
                         rightAngler.set(power); //rotate arm clockwise which means up
@@ -326,7 +326,7 @@ public BananaArm(){
                     rightAngler.set(0.0);
                     setPivotTargetAngle(ARM_PIVOT_MIN_ANGLE);
                 }
-                    else if ( Math.abs(power) > INPUT_THRESHOLD)
+                    else //if ( Math.abs(power) > INPUT_THRESHOLD)
                     {
                         leftAngler.set(power);
                         rightAngler.set(power); //rotate arm counterclockwise which means down

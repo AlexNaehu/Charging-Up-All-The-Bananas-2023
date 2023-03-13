@@ -135,26 +135,26 @@ public class BananaDriveTrain {
     //might have to make another tankDrive method for auto aim, test to see if 0.8 causes overshoot
     
     public void tankDrive(double L, double R){
-        setToBrakeMode();
-        drivebase.tankDrive(-L*0.3, -R*0.3);  //100% for now, used for auton/ auto aim (L and R inputs are < 1)
+        setToCoastMode();
+        drivebase.tankDrive(-L, -R);  //100% for now, used for auton/ auto aim (L and R inputs are < 1)
 
     }
 
     public void tankDriveLow(double L, double R){
         setToBrakeMode();
-        drivebase.tankDrive(-L*0.3, -R*0.3);
+        drivebase.tankDrive(-L*0.3, -R*0.3);//0.3
 
     }
 
     public void tankDriveMid(double L, double R){
         setToBrakeMode();
-        drivebase.tankDrive(-L*0.5, -R*0.5);
+        drivebase.tankDrive(-L*0.7, -R*0.7);
 
     }
 
     public void tankDriveHigh(double L, double R){
         setToCoastMode();
-        drivebase.tankDrive(-L*0.7, -R*0.7);
+        drivebase.tankDrive(-L*1, -R*1);
 
     }
 
