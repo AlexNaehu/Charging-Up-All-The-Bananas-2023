@@ -1,7 +1,7 @@
 package frc.robot.Autonomous;
 
 
-import frc.robot.Mechanisms.BananaClaw;
+import frc.robot.Mechanisms.BananaIntake;
 import frc.robot.Robot.BananaPreSets;
 import frc.robot.Robot.Robot;
 
@@ -38,12 +38,12 @@ public class BananaAutonPaths {
     private final static int hyperLeftTurn = 9;
     private static double currentTime;
 
-    /*IMPORTANT: FIGURE OUT HOW TO PRELOAD OBJECTS INTO THE CLAW*/
+    /*IMPORTANT: FIGURE OUT HOW TO PRELOAD OBJECTS INTO THE Intake*/
     /*Also Important: Consider using a timer to seperate each command by 0.2 seconds so that error doesn't stack */
 
 
     //TEST HOW LONG IT TAKES TO CHANGE BETWEEN CERTAIN ANGLES
-    //TEST HOW LONG IT TAKES TO OPEN AND CLOSE THE CLAW
+    //TEST HOW LONG IT TAKES TO OPEN AND CLOSE THE Intake
     //TEST HOW LONG IT TAKES TO 
     
 
@@ -71,35 +71,16 @@ public class BananaAutonPaths {
         if(currentTime>=2.45 && currentTime<3.30)//2.31
         BananaPreSets.cargoPickUp();
 
-        //alternative
-        //if(currentTime>=3.30 && currentTime<6.35)//6.0
-        //BananaDriveStraight.driveStraight(rightTurn);// right turn for left side, left turn for right side
-        //if(currentTime>=6.35 && currentTime<8.85)
-        //BananaDriveStraight.driveStraight(straightForwardSide);
-        //if(currentTime>=8.90 && currentTime<10.70)//9.20
-        //BananaClaw.closeClaw(1);
-        //if(currentTime>=10.70 && currentTime<10.75)
-        //BananaClaw.closeClaw(0);
-        //if(currentTime>=10.80 & currentTime<11.80)
-        //BananaPreSets.lvl1RocketBall();
-        //if(currentTime>=11.85 && currentTime<14.85)
-        //BananaDriveStraight.driveStraight(leftTurn);
-        //if(currentTime>=14.70 && currentTime<15.0)
-        //BananaDriveStraight.driveStraight(straightForwardSide);
-       
         
-
-
-        //
 
 
 
         if(currentTime>=3.30 && currentTime<3.60)//takes 2.10 seconds to aquire a good grip from full open
         BananaDriveStraight.driveStraight(tipToeForward);
         if(currentTime>=3.30 && currentTime<5.40)
-        BananaClaw.closeClaw(1); //in order to do the flippy, we need to grab the cone from the top side to allow the center of mass distribution to be on the bottom side, rotating the cone to face bottom down
+        BananaIntake.intake(1); //in order to do the flippy, we need to grab the cone from the top side to allow the center of mass distribution to be on the bottom side, rotating the cone to face bottom down
         if (currentTime>=5.40 && currentTime<5.45)
-        BananaClaw.closeClaw(0);
+        BananaIntake.intake(0);
         if(currentTime>=5.45 && currentTime<6.35)
         BananaPreSets.lvl1RocketBall();
         if(currentTime>=6.40 && currentTime<7.30)
@@ -107,10 +88,10 @@ public class BananaAutonPaths {
         if(currentTime>=7.35 && currentTime<10.25)//10.98, Daniel is sending the video, but I think it went past the goal for 0.5 seconds
         BananaDriveStraight.driveStraight(tipToeForward); //this method has a wait time of 1 second, operation time of 1 second
         ////Robot.driveTrain.aimPIDState = true;
-        if(currentTime>=10.55 && currentTime<11.05) //giving 0.6 second for claw to open
-        BananaClaw.openClaw(1);
+        if(currentTime>=10.55 && currentTime<11.05) //giving 0.6 second for Intake to open
+        BananaIntake.output(1);
         if(currentTime>=11.05 && currentTime<11.10)
-        BananaClaw.openClaw(0);
+        BananaIntake.output(0);
         ////Robot.driveTrain.aimPIDState = false;
         if(currentTime>=11.15 && currentTime<12.65)
         BananaDriveStraight.driveStraight(tipToeBackward); //this method has a wait time of 1 second
@@ -124,6 +105,26 @@ public class BananaAutonPaths {
         BananaDriveStraight.driveStraight(straightForwardSide);
         
         
+        //alternative
+        //if(currentTime>=3.30 && currentTime<6.35)//6.0
+        //BananaDriveStraight.driveStraight(rightTurn);// right turn for left side, left turn for right side
+        //if(currentTime>=6.35 && currentTime<8.85)
+        //BananaDriveStraight.driveStraight(straightForwardSide);
+        //if(currentTime>=8.90 && currentTime<10.70)//9.20
+        //BananaIntake.intake(1);
+        //if(currentTime>=10.70 && currentTime<10.75)
+        //BananaIntake.intake(0);
+        //if(currentTime>=10.80 & currentTime<11.80)
+        //BananaPreSets.lvl1RocketBall();
+        //if(currentTime>=11.85 && currentTime<14.85)
+        //BananaDriveStraight.driveStraight(leftTurn);
+        //if(currentTime>=14.70 && currentTime<15.0)
+        //BananaDriveStraight.driveStraight(straightForwardSide);
+       
+        
+
+
+        //
 
         //if(currentTime>=10.10 && currentTime<13.0)
         //BananaDriveStraight.driveStraight(6);
@@ -132,9 +133,9 @@ public class BananaAutonPaths {
         //BananaDriveStraight.driveStraight(straightForwardSide); //this method has a wait time of 1 second
         
         //if(currentTime>=12.15 && currentTime<12.75) //0.6 seconds to reclose around a cone
-        //BananaClaw.closeClaw(1.0);
+        //BananaIntake.intake(1.0);
         //if(currentTime>=12.75 && currentTime<12.80)
-        //BananaClaw.closeClaw(0.0);
+        //BananaIntake.intake(0.0);
         //if(currentTime>=12.80 && currentTime<13.80)
         //BananaPreSets.lvl1RocketBall();
         //if(currentTime>=13.80 && currentTime<14.80)
@@ -160,9 +161,9 @@ public class BananaAutonPaths {
         //if(currentTime>=2.40 && currentTime<3.30)//2.31
         //BananaPreSets.cargoPickUp();
         //if(currentTime>=3.30 && currentTime<5.40)//takes 2.10 seconds to aquire a good grip from full open
-        //BananaClaw.closeClaw(1); //in order to do the flippy, we need to grab the cone from the top side to allow the center of mass distribution to be on the bottom side, rotating the cone to face bottom down
+        //BananaIntake.intake(1); //in order to do the flippy, we need to grab the cone from the top side to allow the center of mass distribution to be on the bottom side, rotating the cone to face bottom down
         //if (currentTime>=5.40 && currentTime<5.45)
-        //BananaClaw.closeClaw(0);
+        //BananaIntake.intake(0);
         //if(currentTime>=5.45 && currentTime<6.35)
         //BananaPreSets.lvl1RocketBall();
         //if(currentTime>=6.40 && currentTime<7.30)
@@ -170,10 +171,10 @@ public class BananaAutonPaths {
         //if(currentTime>=7.35 && currentTime<10.50)//10.98, Daniel is sending the video, but I think it went past the goal for 0.5 seconds
         //BananaDriveStraight.driveStraight(tipToeForward); //this method has a wait time of 1 second, operation time of 1 second
         ////Robot.driveTrain.aimPIDState = true;
-        //if(currentTime>=10.55 && currentTime<11.05) //giving 0.6 second for claw to open
-        //BananaClaw.openClaw(1);
+        //if(currentTime>=10.55 && currentTime<11.05) //giving 0.6 second for Intake to open
+        //BananaIntake.output(1);
         //if(currentTime>=11.05 && currentTime<11.10)
-        //BananaClaw.openClaw(0);
+        //BananaIntake.output(0);
         ////Robot.driveTrain.aimPIDState = false;
         //if(currentTime>=11.15 && currentTime<12.65)
         //BananaDriveStraight.driveStraight(tipToeBackward); //this method has a wait time of 1 second
@@ -193,9 +194,9 @@ public class BananaAutonPaths {
         //BananaDriveStraight.driveStraight(straightForwardSide); //this method has a wait time of 1 second
         
         //if(currentTime>=12.15 && currentTime<12.75) //0.6 seconds to reclose around a cone
-        //BananaClaw.closeClaw(1.0);
+        //BananaIntake.intake(1.0);
         //if(currentTime>=12.75 && currentTime<12.80)
-        //BananaClaw.closeClaw(0.0);
+        //BananaIntake.intake(0.0);
         //if(currentTime>=12.80 && currentTime<13.80)
         //BananaPreSets.lvl1RocketBall();
         //if(currentTime>=13.80 && currentTime<14.80)
@@ -217,9 +218,9 @@ public class BananaAutonPaths {
         //if(currentTime>=2.40 && currentTime<3.30)//2.31
         //BananaPreSets.cargoPickUp();
         //if(currentTime>=3.30 && currentTime<5.40)//takes 2.10 seconds to aquire a good grip from full open
-        //BananaClaw.closeClaw(1); //in order to do the flippy, we need to grab the cone from the top side to allow the center of mass distribution to be on the bottom side, rotating the cone to face bottom down
+        //BananaIntake.intake(1); //in order to do the flippy, we need to grab the cone from the top side to allow the center of mass distribution to be on the bottom side, rotating the cone to face bottom down
         //if (currentTime>=5.40 && currentTime<5.45)
-        //BananaClaw.closeClaw(0);
+        //BananaIntake.intake(0);
         //if(currentTime>=5.45 && currentTime<6.35)
         //BananaPreSets.lvl1RocketBall();
         //if(currentTime>=6.40 && currentTime<7.30)
@@ -227,10 +228,10 @@ public class BananaAutonPaths {
         //if(currentTime>=7.35 && currentTime<10.50)//10.98, Daniel is sending the video, but I think it went past the goal for 0.5 seconds
         //BananaDriveStraight.driveStraight(tipToeForward); //this method has a wait time of 1 second, operation time of 1 second
         ////Robot.driveTrain.aimPIDState = true;
-        //if(currentTime>=10.55 && currentTime<11.05) //giving 0.6 second for claw to open
-        //BananaClaw.openClaw(1);
+        //if(currentTime>=10.55 && currentTime<11.05) //giving 0.6 second for Intake to open
+        //BananaIntake.output(1);
         //if(currentTime>=11.05 && currentTime<11.10)
-        //BananaClaw.openClaw(0);
+        //BananaIntake.output(0);
         ////Robot.driveTrain.aimPIDState = false;
         //if(currentTime>=11.15 && currentTime<12.65)
         //BananaDriveStraight.driveStraight(tipToeBackward); //this method has a wait time of 1 second

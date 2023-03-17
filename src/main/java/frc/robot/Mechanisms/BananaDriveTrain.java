@@ -170,26 +170,28 @@ public class BananaDriveTrain {
     public void coneAimPID(){
         coneThread = new Thread(() ->
     {
-      float kAimP = -0.01f;  //may need to calibrate kAimP or min_command if aiming causes occilation
-      float min_command = 0.0005f;
+      double kAimP = -0.035;  //may need to calibrate kAimP or min_command if aiming causes occilation
+      double min_command = 0.01;
         //max power is -0.01(30)  or -0.01(-30)= -0.3 or 0.3
-      float cone_heading_error;
-      float steering_adjust;
+      double cone_heading_error;
+      double steering_adjust;
       
-      float limeX = (float) SmartDashboard.getNumber("tx", 0.0f); //display 60 pixels wide, so 0 plus/minus 30
-      double validTarget = SmartDashboard.getNumber("tv", 0.0);  
+      
+      double validTarget = SmartDashboard.getNumber("Limelight Valid Target", 0.0);  
 
       
 
   
       while (true)
       {
-        if(aimPIDState==true && validTarget == 1.0)
+        if(aimPIDState==true)//&& validTarget == 1.0)
             {
 
          
-            cone_heading_error = -(limeX); //figure out what x values limelight produces for the target in order to scale kAimP
-            steering_adjust = 0.0f;
+            cone_heading_error = -(SmartDashboard.getNumber("Limelight X", 0.0)); //-30 to 30 
+            steering_adjust = 0.0;
+
+            SmartDashboard.putNumber("Cone Heading Error", cone_heading_error);
   
                 if (Math.abs(cone_heading_error) > 1.0)
                 {
@@ -202,11 +204,18 @@ public class BananaDriveTrain {
                         steering_adjust = kAimP*cone_heading_error - min_command;
                     }
                         
+                    cone_left_command = steering_adjust;
+                    cone_right_command = -(steering_adjust);
+                }
+
+                else
+                {
+                    cone_left_command = 0;
+                    cone_right_command = 0;
                 }
                 
-                
-            cone_left_command = steering_adjust;
-            cone_right_command = -(steering_adjust);
+            
+            
 
             aimBot(cone_left_command, cone_right_command);
         
@@ -228,13 +237,13 @@ public class BananaDriveTrain {
         /* 
         cubeThread = new Thread(() ->
     {
-      float kAimP = -0.000005f;  //may need to calibrate kAimP or min_command if aiming causes occilation
-      float min_command = 0.000005f;
+      double kAimP = -0.000005f;  //may need to calibrate kAimP or min_command if aiming causes occilation
+      double min_command = 0.000005f;
   
-      float cube_heading_error;
-      float steering_adjust;
+      double cube_heading_error;
+      double steering_adjust;
 
-      float aprilX = (float) SmartDashboard.getNumber("Center X", 0.0f);
+      double aprilX = (double) SmartDashboard.getNumber("Center X", 0.0f);
       double validTarget = SmartDashboard.getNumber("tv", 0.0);
 
 
@@ -292,7 +301,7 @@ public class BananaDriveTrain {
     public void aimBot(double left_command, double right_command)
     {
         if (aimPIDState == true){
-        if(Math.abs(left_command) < 0.03 && Math.abs(right_command) < 0.03)
+        if(Math.abs(left_command) < 0.1 && Math.abs(right_command) < 0.1)
         {
             drivebase.tankDrive(0, 0);
         }

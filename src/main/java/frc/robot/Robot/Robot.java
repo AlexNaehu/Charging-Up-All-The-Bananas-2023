@@ -15,6 +15,9 @@ import edu.wpi.first.networktables.NetworkTable;
 //import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
 //import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.net.PortForwarder;
 
@@ -33,7 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autonomous.BananaAutonPaths;
 import frc.robot.Mechanisms.BananaArm;
 import frc.robot.Mechanisms.BananaBrake;
-import frc.robot.Mechanisms.BananaClaw;
+import frc.robot.Mechanisms.BananaIntake;
 import frc.robot.Mechanisms.BananaDriveTrain;
 import frc.robot.Vision.SensorObject;
 
@@ -50,8 +53,10 @@ public class Robot extends TimedRobot
   public static BananaArm         arm;
   public static BananaDriveTrain  driveTrain;
   public static BananaBrake      brake;
-  public static BananaClaw        claw;
+  public static BananaIntake        Intake;
   public static SensorObject    sensor;
+
+  private UsbCamera bananaCam;
 
   private static final double LEFT_DEADBAND_THRESHOLD = 0.15;
   private static final double RIGHT_DEADBAND_THRESHOLD = 0.15;
@@ -90,7 +95,13 @@ public class Robot extends TimedRobot
     /*--------------------------------------------------------------------------
     *  Initialize Drive Cameras
     *-------------------------------------------------------------------------*/
-   PortForwarder.add(5800, "limelight.local", 5800);
+
+    bananaCam = CameraServer.startAutomaticCapture();
+    bananaCam.setFPS(15);
+    bananaCam.setResolution(320, 240);
+    bananaCam.setPixelFormat(PixelFormat.kMJPEG);
+
+    PortForwarder.add(5800, "limelight.local", 5800);
     PortForwarder.add(5801, "limelight.local", 5801);
     PortForwarder.add(5802, "limelight.local", 5802);
    
@@ -100,7 +111,7 @@ public class Robot extends TimedRobot
     *-------------------------------------------------------------------------*/
     arm        = new BananaArm();
     driveTrain = new BananaDriveTrain();
-    claw = new BananaClaw();
+    Intake = new BananaIntake();
     brake       = new BananaBrake();
   
     sensor = new SensorObject();
@@ -133,7 +144,7 @@ public class Robot extends TimedRobot
     arm.pivotPID();
     
                                                                                                                                                                                                                                                                                                                                                                                        
-    //driveTrain.coneAimPID();
+    driveTrain.coneAimPID();
     //driveTrain.cubeAimPID(); //prolly not going to use this bc of USB load on roboRio CPU
     //sensor.sensorObject(); //def cant use bc of image processing load on roboRio load
 
@@ -149,18 +160,7 @@ public class Robot extends TimedRobot
   @Override
   public void robotPeriodic() 
   {
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
-    //AHHHHHHHHHHHHHHHHHHHH
+
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     //NetworkTableInstance table = NetworkTableInstance.getDefault();
 
@@ -180,6 +180,9 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Limelight Area", area); //area of FOV that the target takes up
     SmartDashboard.putNumber("Limelight Valid Target", v);//0 for no valid target, 1 for valid target
 
+    //USB Camera
+    bananaCam.setFPS(15);
+    bananaCam.setResolution(320, 240);
     
     //Sensors
     SmartDashboard.putNumber("Robot Orientation", navx.getAngle());
@@ -209,9 +212,10 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Left Arm Angler Temperature", arm.getArmTemp(28));
     
 
-    //Claw
-    SmartDashboard.putBoolean("Claw: Open State", claw.isIntakeOpen());
-    SmartDashboard.putNumber("Claw: Left Power", claw.getLeftFingerPower());
+    //Intake
+    SmartDashboard.putBoolean("Intake: Open State", Intake.isIntakeOpen());
+    SmartDashboard.putNumber("Intake: Left Power", Intake.getLeftRollerPower());
+    SmartDashboard.putNumber("Intake: Right Power", Intake.getRightRollerPower());
 
     //Brake
     SmartDashboard.putBoolean("Brake: On State", brake.isBrakeOn());
@@ -364,20 +368,20 @@ public class Robot extends TimedRobot
     }
  
     /*--------------------------------------------------------------------------
-    *  Claw Movement - Manual Control (1)
+    *  Intake Movement - Manual Control (1)
     *-------------------------------------------------------------------------*/
     
     if(controller1.getLeftTriggerAxis()<0.05 && controller1.getRightTriggerAxis()>0.05)
     {
-      BananaClaw.closeClaw(controller1.getRightTriggerAxis()); // RIGHT TRIGGER // 1
+      BananaIntake.intake(controller1.getRightTriggerAxis()); // RIGHT TRIGGER // 1
     }
     else if (controller1.getLeftTriggerAxis() > 0.05 && controller1.getRightTriggerAxis() < 0.05)
     {
-      BananaClaw.openClaw(controller1.getLeftTriggerAxis()); // LEFT TRIGGER // 1
+      BananaIntake.output(controller1.getLeftTriggerAxis()); // LEFT TRIGGER // 1
     }
     else
     {
-      BananaClaw.closeClaw(0.0); //Stop Motor
+      BananaIntake.intake(0.0); //Stop Motor
     }
     
     /*--------------------------------------------------------------------------
@@ -401,7 +405,7 @@ public class Robot extends TimedRobot
     }
     else
     {
-      BananaClaw.closeClaw(0.0); //Stop Motor
+      BananaIntake.closeIntake(0.0); //Stop Motor
     }
      */
 
@@ -477,17 +481,17 @@ public class Robot extends TimedRobot
      
     if(controller2.getYButton())
     {
-      BananaPreSets.lvl3RocketBall(); // B BUTTON // 2
+      BananaPreSets.lvl3RocketBall(); // Y BUTTON // 2
     }
 
     if(controller2.getXButton())
     {
-      BananaPreSets.lvl2RocketBall(); // Y BUTTON // 2
+      BananaPreSets.lvl2RocketBall(); // X BUTTON // 2
     }
 
     if(controller2.getBButton())
     {
-      BananaPreSets.lvl1RocketBall();
+      BananaPreSets.lvl1RocketBall(); // B BUTTON // 2
     }
 
     

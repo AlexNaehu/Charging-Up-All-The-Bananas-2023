@@ -15,19 +15,21 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 
 
-public class BananaClaw {
+public class BananaIntake {
     
-    private static WPI_VictorSPX leftFinger;
+    private static WPI_VictorSPX leftRoller;
+    private static WPI_VictorSPX rightRoller;
 
-    private int leftFinger_ID = 25;
-    //private int rightFinger_ID = 29;
+    private int leftRoller_ID = 26;
+    private int rightRoller_ID = 27;
 
     public static boolean intakeOpen = true;
 
-    public BananaClaw()
+    public BananaIntake()
     {
 
-        leftFinger = new WPI_VictorSPX(leftFinger_ID);
+        leftRoller = new WPI_VictorSPX(leftRoller_ID);
+        rightRoller = new WPI_VictorSPX(rightRoller_ID);
 
     }
 
@@ -35,14 +37,16 @@ public class BananaClaw {
     {
         intakeOpen = !intakeOpen;
     }
-    public static void closeClaw(double power) //takes 2 seconds to close around a cone from full open 
+    public static void intake(double power) //takes 2 seconds to close around a cone from full open 
     {
-        leftFinger.set(-power);
+        leftRoller.set(-power*0.3);
+        rightRoller.set(power*0.3);
     }
 
-    public static void openClaw(double power) // takes 2 seconds to open from a cone closed position back to full open
+    public static void output(double power) // takes 2 seconds to open from a cone closed position back to full open
     {
-        leftFinger.set(power);
+        leftRoller.set(power*0.3);
+        rightRoller.set(-power*0.3);
     }
 
     public boolean isIntakeOpen()
@@ -50,9 +54,14 @@ public class BananaClaw {
         return intakeOpen;
     }
 
-    public double getLeftFingerPower()
+    public double getLeftRollerPower()
     {
-        return leftFinger.get();
+        return leftRoller.get();
+    }
+
+    public double getRightRollerPower()
+    {
+        return rightRoller.get();
     }
     
 
