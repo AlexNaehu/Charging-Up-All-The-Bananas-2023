@@ -58,11 +58,11 @@ public class Robot extends TimedRobot
 
   private UsbCamera bananaCam;
 
-  private static final double LEFT_DEADBAND_THRESHOLD = 0.15;
-  private static final double RIGHT_DEADBAND_THRESHOLD = 0.15;
+  //private static final double LEFT_DEADBAND_THRESHOLD = 0.15;
+  //private static final double RIGHT_DEADBAND_THRESHOLD = 0.15;
   double pThr = 0.0;
 
-  private boolean armPIDState = false;
+  //private boolean armPIDState = false;
 
   private boolean gear1 = false;//0.3 Power
   private boolean gear2 = true;//0.5 Power
@@ -145,7 +145,7 @@ public class Robot extends TimedRobot
     
                                                                                                                                                                                                                                                                                                                                                                                        
     driveTrain.coneAimPID();
-    //driveTrain.cubeAimPID(); //prolly not going to use this bc of USB load on roboRio CPU
+    driveTrain.cubeAimPID(); //prolly not going to use this bc of USB load on roboRio CPU
     //sensor.sensorObject(); //def cant use bc of image processing load on roboRio load
 
 
@@ -190,7 +190,8 @@ public class Robot extends TimedRobot
     
     
     //DriveBase
-    SmartDashboard.putBoolean("Aim PID State", BananaDriveTrain.aimPIDState);
+    SmartDashboard.putBoolean("Aim PID State", BananaDriveTrain.coneAimPIDState);
+    SmartDashboard.putBoolean("Aim PID State", BananaDriveTrain.cubeAimPIDState);
     SmartDashboard.putNumber("FR Motor Temperature", driveTrain.getMotorTemperature(21));
     SmartDashboard.putNumber("BR Motor Temperature", driveTrain.getMotorTemperature(22));
     SmartDashboard.putNumber("FL Motor Temperature", driveTrain.getMotorTemperature(20));
@@ -362,9 +363,14 @@ public class Robot extends TimedRobot
     *  DriveBase Movement - AimBot (1)
     *-------------------------------------------------------------------------*/
     
-    if(controller1.getStartButtonPressed()) // A BUTTON // 1
+    if(controller1.getStartButtonPressed()) // START BUTTON // 1
     {
-      BananaDriveTrain.aimPIDState = !(BananaDriveTrain.aimPIDState);
+      BananaDriveTrain.coneAimPIDState = !(BananaDriveTrain.coneAimPIDState);
+    }
+
+    if(controller1.getBackButtonPressed()) // BACK Button // 1
+    {
+      BananaDriveTrain.cubeAimPIDState = !(BananaDriveTrain.cubeAimPIDState);
     }
  
     /*--------------------------------------------------------------------------
@@ -420,13 +426,7 @@ public class Robot extends TimedRobot
     *  Brake Movement - Presets (2)
     *-------------------------------------------------------------------------*/
      
-    if(controller1.getBackButton()) // Back Button // 1
-    {
-     //BananaBrake.Brake(1);
-    }
-    else      
-      //BananaBrake.Brake(0);
-
+    
 
     /*-----------------------------------------------------------------------
     *  Out of Deadband - Manual Control (2)
