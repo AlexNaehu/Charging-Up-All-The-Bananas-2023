@@ -145,7 +145,7 @@ public class Robot extends TimedRobot
     
                                                                                                                                                                                                                                                                                                                                                                                        
     driveTrain.coneAimPID();
-    driveTrain.cubeAimPID(); //prolly not going to use this bc of USB load on roboRio CPU
+    //driveTrain.cubeAimPID(); //prolly not going to use this bc of USB load on roboRio CPU
     //sensor.sensorObject(); //def cant use bc of image processing load on roboRio load
 
 
@@ -190,8 +190,8 @@ public class Robot extends TimedRobot
     
     
     //DriveBase
-    SmartDashboard.putBoolean("Aim PID State", BananaDriveTrain.coneAimPIDState);
-    SmartDashboard.putBoolean("Aim PID State", BananaDriveTrain.cubeAimPIDState);
+    SmartDashboard.putBoolean("Cone Aim PID State", BananaDriveTrain.coneAimPIDState);
+    SmartDashboard.putBoolean("Cube Aim PID State", BananaDriveTrain.cubeAimPIDState);
     SmartDashboard.putNumber("FR Motor Temperature", driveTrain.getMotorTemperature(21));
     SmartDashboard.putNumber("BR Motor Temperature", driveTrain.getMotorTemperature(22));
     SmartDashboard.putNumber("FL Motor Temperature", driveTrain.getMotorTemperature(20));
