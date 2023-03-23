@@ -186,6 +186,7 @@ public class Robot extends TimedRobot
     
     //Sensors
     SmartDashboard.putNumber("Robot Orientation", navx.getAngle());
+    SmartDashboard.putNumber("Roll", navx.getRoll());
    
     
     
@@ -276,11 +277,11 @@ public class Robot extends TimedRobot
     switch (m_autoSelected) {
 
       case LeftScoreMob:
-      //BananaAutonPaths.leftScoreMob();
+      BananaAutonPaths.leftScoreMob();
         // Put custom auto code here
         break;
       case MidScorePark:
-      //BananaAutonPaths.midScorePark();
+      BananaAutonPaths.midScorePark();
         // Put custom auto code here
         break;
       case RightScoreMob:
@@ -379,15 +380,15 @@ public class Robot extends TimedRobot
     
     if(controller1.getLeftTriggerAxis()<0.05 && controller1.getRightTriggerAxis()>0.05)
     {
-      BananaIntake.intake(controller1.getRightTriggerAxis()); // RIGHT TRIGGER // 1
+      BananaIntake.output(controller1.getRightTriggerAxis()); // RIGHT TRIGGER // 1
     }
     else if (controller1.getLeftTriggerAxis() > 0.05 && controller1.getRightTriggerAxis() < 0.05)
     {
-      BananaIntake.output(controller1.getLeftTriggerAxis()); // LEFT TRIGGER // 1
+      BananaIntake.intake(controller1.getLeftTriggerAxis()); // LEFT TRIGGER // 1
     }
     else
     {
-      BananaIntake.intake(0.0); //Stop Motor
+      BananaIntake.output(0.0); //Stop Motor
     }
     
     /*--------------------------------------------------------------------------

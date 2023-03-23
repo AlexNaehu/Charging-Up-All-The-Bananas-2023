@@ -22,8 +22,8 @@ public class BananaIntake {
     private static WPI_VictorSPX claw;
 
 
-    private int leftRoller_ID = 26;
-    private int rightRoller_ID = 25;
+    private int leftRoller_ID = 25;
+    private int rightRoller_ID = 29;
     private int claw_ID = 25;
 
 
@@ -44,15 +44,15 @@ public class BananaIntake {
     }
     public static void intake(double power) //takes 2 seconds to close around a cone from full open 
     {
-        leftRoller.set(-power*0.3);
-        rightRoller.set(power*0.3);
+        leftRoller.set(-power*0.8);//0.55
+        rightRoller.set(power*0.8);//0.55
         //claw.set(0.5);
     }
 
     public static void output(double power) // takes 2 seconds to open from a cone closed position back to full open
     {
-        leftRoller.set(power*0.3);
-        rightRoller.set(-power*0.3);
+        leftRoller.set(power*0.6);
+        rightRoller.set(-power*0.6);
         //claw.set(-0.5);
     }
 

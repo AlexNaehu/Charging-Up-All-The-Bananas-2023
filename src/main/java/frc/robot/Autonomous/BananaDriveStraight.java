@@ -63,12 +63,12 @@ public class BananaDriveStraight {
             break;
 
             case(8):    //hyperRightTurn (8)
-                Robot.driveTrain.tankDriveLow(-3, 3); //2x as fast as "rightTurn"
+                Robot.driveTrain.tankDriveLow(-3.205, 3.205); //N x as fast as "rightTurn"
 
             break;
 
             case(9):    //hyperLeftTurn (9)
-                Robot.driveTrain.tankDriveLow(3, -3); //2x as fast as "leftTurn"
+                Robot.driveTrain.tankDriveLow(3.205, -3.205); //N x as fast as "leftTurn"
 
             break;
 

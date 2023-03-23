@@ -65,6 +65,7 @@ public class BananaDriveTrain {
     public final double RT_PID_D = 0.0;    
     public final double RT_PID_F = 1080.0/20480.0; 
 
+    private static float balanaceDeadZone = 5.0f;//7.5
 
     //private      double drvStraightTargetVelocityOffsetFwd = 50.0;
     
@@ -315,10 +316,18 @@ public class BananaDriveTrain {
     }
 
 
-    public static void balance()
+    public static void balance(float roll)
     {
-        if (Robot.brake.isBrakeOn() == true){
-            
+        if(roll > balanaceDeadZone){
+            drivebase.tankDrive(0.45, 0.45);
+        }
+        
+        if(roll < -balanaceDeadZone){
+            drivebase.tankDrive(-0.45, -0.45);
+        }
+        
+        if(Math.abs(roll)<balanaceDeadZone){
+            drivebase.tankDrive(0.0, 0.0);
         }
     }
 

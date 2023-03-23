@@ -142,10 +142,10 @@ public BananaArm(){
         Thread t = new Thread(() ->
         {
             final double ARM_PIVOT_THREAD_WAITING_TIME = 0.005;
-            final double kP = 0.021;//0.020 //0.013; //TODO
-            final double kD = 0.0012;//0.00020
+            final double kP = 0.018;//0.013 //0.020
+            final double kD = 0.0012;//0.0012
             final double kI = 0.0;
-            final double kA = 0.34;//0.38//0.0077;
+            final double kA = 0.33;//0.38//0.0077;
             final double kF = 0.0;//-0.05;
 
             double power;            
@@ -217,7 +217,7 @@ public BananaArm(){
                         kPpower = kP * currentError;
                         kIpower = kI * integral;
                         kDpower = kD * currentDerivative;//filteredDerivative;//currentDerivative;//filteredDerivative
-                        kApower = (kA * (Math.cos(Math.toRadians(159.5 - currentAngle))));
+                        kApower = (kA * (Math.cos(Math.toRadians(195.0 - currentAngle))));//159.5
                         kFpower = kF;
 
                         power = kPpower + kIpower + kDpower + kApower + kFpower;

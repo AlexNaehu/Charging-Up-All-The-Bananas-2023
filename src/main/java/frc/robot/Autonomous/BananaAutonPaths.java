@@ -1,6 +1,7 @@
 package frc.robot.Autonomous;
 
 
+import frc.robot.Mechanisms.BananaDriveTrain;
 import frc.robot.Mechanisms.BananaIntake;
 import frc.robot.Robot.BananaPreSets;
 import frc.robot.Robot.Robot;
@@ -67,10 +68,10 @@ public class BananaAutonPaths {
         //BananaPreSets.lvl1RocketBall();
         //if(currentTime>=0.5 && currentTime<1.1)
         //BananaPreSets.lvl3RocketBall();
-        //if(currentTime>=1.15 && currentTime<2.65)//1.5S
+        //if(currentTime>=1.15 && currentTime<2.3)//1.5S
         //BananaDriveStraight.driveStraight(tipToeForward);
-        //if(currentTime>=2.70 && currentTime<3.20)
-        //BananaIntake.output(0.5);
+        //if(currentTime>=2.35 && currentTime<3.20)
+        //BananaIntake.output(1);
         //if(currentTime>=3.2 && currentTime<3.25)
         //BananaIntake.output(0);
         //if(currentTime>=3.30 && currentTime<4.80)//1.5S
@@ -79,26 +80,28 @@ public class BananaAutonPaths {
         //BananaPreSets.lvl1RocketBall();
         //if(currentTime>=5.35 && currentTime<5.85)
         //BananaPreSets.cargoPickUp();
-        if(currentTime>=5.90 && currentTime<6.25)
-        BananaDriveStraight.driveStraight(hyperRightTurn);
+        if(currentTime>=5.5 && currentTime<6.25){
+            BananaDriveStraight.driveStraight(hyperRightTurn);
+            BananaPreSets.cargoPickUp();}
         //if(currentTime>=6.30 && currentTime<9.20)
         //BananaDriveStraight.driveStraight(straightForwardSide); 
         ////Robot.driveTrain.aimPIDState = true;
-        //if(currentTime>=9.30 && currentTime<9.80) //giving 0.5 second for Intake to close
-        //BananaIntake.intake(0.5);
+        //if(currentTime>=8.80 && currentTime<9.80) //giving 0.5 second for Intake to close
+        //BananaIntake.intake(1);
         //if(currentTime>=9.80 && currentTime<9.85)
         //BananaIntake.intake(0);
         ////Robot.driveTrain.aimPIDState = false;
         //if(currentTime>=9.90 && currentTime<10.90)
         //BananaPreSets.lvl1RocketBall();
-        //if(currentTime>=10.95 && currentTime<11.30)
-        //BananaDriveStraight.driveStraight(hyperRightTurn); 
+        //if(currentTime>=10.47 && currentTime<11.30){
+        //BananaDriveStraight.driveStraight(hyperRightTurn);
+        //BananaPreSets.lvl1RocketBall();} 
         //if(currentTime>=11.35 && currentTime<14.45) //has to travel far enough to place the claw above the lvl2 shelf
         //BananaDriveStraight.driveStraight(straightForwardSide); 
         //if(currentTime>=13.25 && currentTime<14.25) //raises arm while driving back towards goal
         //BananaPreSets.lvl2RocketBall();
         //if(currentTime>=14.50 && currentTime<14.95)
-        //BananaIntake.output(0.5);
+        //BananaIntake.output(1);
         //if(currentTime>=14.95 && currentTime<15.0)
         //BananaIntake.output(0);
 
@@ -184,20 +187,22 @@ public class BananaAutonPaths {
         BananaPreSets.lvl1RocketBall();
         if(currentTime>=5.35 && currentTime<5.85)
         BananaPreSets.cargoPickUp();
-        if(currentTime>=5.90 && currentTime<6.25)
-        BananaDriveStraight.driveStraight(hyperLeftTurn);
+        if(currentTime>=5.42 && currentTime<6.25){
+            BananaDriveStraight.driveStraight(hyperLeftTurn);
+            BananaPreSets.cargoPickUp();}
         if(currentTime>=6.30 && currentTime<9.20)
         BananaDriveStraight.driveStraight(straightForwardSide); 
         ////Robot.driveTrain.aimPIDState = true;
-        if(currentTime>=9.30 && currentTime<9.80) //giving 0.5 second for Intake to close
+        if(currentTime>=8.80 && currentTime<9.80) //giving 0.5 second for Intake to close
         BananaIntake.intake(0.5);
         if(currentTime>=9.80 && currentTime<9.85)
         BananaIntake.intake(0);
         ////Robot.driveTrain.aimPIDState = false;
         if(currentTime>=9.90 && currentTime<10.90)
         BananaPreSets.lvl1RocketBall();
-        if(currentTime>=10.95 && currentTime<11.30)
-        BananaDriveStraight.driveStraight(hyperLeftTurn); 
+        if(currentTime>=10.47 && currentTime<11.30){
+        BananaDriveStraight.driveStraight(hyperLeftTurn);
+        BananaPreSets.lvl1RocketBall();}  
         if(currentTime>=11.35 && currentTime<14.45) //has to travel far enough to place the claw above the lvl2 shelf
         BananaDriveStraight.driveStraight(straightForwardSide); 
         if(currentTime>=13.25 && currentTime<14.25) //raises arm while driving back towards goal
@@ -265,6 +270,45 @@ public class BananaAutonPaths {
         
         currentTime = Robot.autonClock.get();
         
+
+
+        //comment out everything and uncomment each line after testing each time
+ 
+        //if(currentTime>0.0 && currentTime<0.5)
+        //BananaPreSets.lvl1RocketBall();
+        //if(currentTime>=0.5 && currentTime<1.1)
+        //BananaPreSets.lvl3RocketBall();
+        //if(currentTime>=1.15 && currentTime<2.65)//1.5S
+        //BananaDriveStraight.driveStraight(tipToeForward);
+        //if(currentTime>=2.70 && currentTime<3.20)
+        //BananaIntake.output(0.5);
+        //if(currentTime>=3.2 && currentTime<3.25)
+        //BananaIntake.output(0);
+        //if(currentTime>=3.30 && currentTime<4.80)//1.5S
+        //BananaDriveStraight.driveStraight(tipToeBackward);
+        //if (currentTime>=4.80 && currentTime<5.30)
+        //BananaPreSets.lvl1RocketBall();
+        //if(currentTime>=5.35 && currentTime<5.85)
+        //BananaPreSets.cargoPickUp();
+        //if(currentTime>=5.42 && currentTime<6.25){
+        //BananaDriveStraight.driveStraight(hyperLeftTurn);
+        //BananaPreSets.cargoPickUp();}
+        //if(currentTime>=6.30 && currentTime<9.20)
+        //BananaDriveStraight.driveStraight(straightForwardSide); 
+        if(currentTime>=9.25 && currentTime<15.0){
+        BananaDriveTrain.balance(Robot.navx.getRoll());
+        }
+        
+
+
+
+
+
+
+
+        /* 
+        currentTime = Robot.autonClock.get();
+        
         //comment out everything and uncomment each line after testing each time
  
         if(currentTime>0.0 && currentTime<1.0)
@@ -301,6 +345,7 @@ public class BananaAutonPaths {
         BananaDriveStraight.driveStraight(hyperRightTurn);
         if(currentTime>=13.4 && currentTime<14.0) //need to trial and error to get the robot to drive right onto the center of the platform
         BananaDriveStraight.driveStraight(straightForwardSide);
+        */
 
     } 
 }
